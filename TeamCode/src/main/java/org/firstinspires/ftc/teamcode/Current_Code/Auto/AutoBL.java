@@ -8,8 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name="AutoR", group="Robot")
-public class AutoR extends LinearOpMode {
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+
+@Autonomous(name="AutoBL", group="Robot")
+public class AutoBL extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
@@ -17,6 +23,12 @@ public class AutoR extends LinearOpMode {
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
 
+    private DcMotor motorLSR = null;
+
+    private DcMotor motorLSL = null;
+    OpenCvWebcam webcam;
+    Blue.SkystoneDeterminationPipeline pipeline;
+    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -37,13 +49,46 @@ public class AutoR extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        pipeline = new Blue.SkystoneDeterminationPipeline();
+        webcam.setPipeline(pipeline);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                // This is in what viewing window the camera is seeing through and it doesn't matter
+                // what orientation it is | UPRIGHT, SIDEWAYS_LEFT, SIDEWAYS_RIGHT, etc.
+
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
+
+        while (!isStarted() && !isStopRequested()) {
+            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+            telemetry.update();
+
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
+        }
+
+        snapshotAnalysis = pipeline.getAnalysis();
+
+
+        telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
+        telemetry.update();
 
         // Initialize the drive system variables.
         motorFR = hardwareMap.get(DcMotor.class, "motorFR");
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-
+        motorLSR = hardwareMap.get(DcMotor.class, "motorLSR");
+        motorLSL = hardwareMap.get(DcMotor.class, "motorLSL");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -56,18 +101,39 @@ public class AutoR extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
+        telemetry.addData("Status", "\uD83C\uDD97");
+        telemetry.update();
 
         waitForStart();
 
-        //Auto Code
+        switch (snapshotAnalysis) {
+            case LEFT: // Level 3
+            {
 
-         forward(0.25,48);
-
-         right(0.25, 96);
+                break;
 
             }
+
+
+            case RIGHT: // Level 1
+            {
+
+
+                break;
+            }
+
+            case CENTER: // Level 2
+            {
+
+
+                break;
+            }
+        }
+
+    }
 
 
 
@@ -230,4 +296,57 @@ public class AutoR extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
+    public void lsUp(double speed, int distance){
+        int moveCounts = (int) (distance * COUNTS_PER_INCH);
+
+        motorLSR.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorLSR.setTargetPosition(distance * in);
+        motorLSL.setTargetPosition(distance * in);
+
+        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        motorLSR.setPower(-speed);
+        motorLSL.setPower(speed);
+
+        while (opModeIsActive() && motorFL.isBusy()) {
+        }
+
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+
+    public void lsDown(double speed, int distance){
+        int moveCounts = (int) (distance * COUNTS_PER_INCH);
+
+        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLSL.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorLSR.setTargetPosition(distance * in);
+        motorLSL.setTargetPosition(distance * in);
+
+        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        motorLSR.setPower(-speed);
+        motorLSL.setPower(speed);
+
+        while (opModeIsActive() && motorFL.isBusy()) {
+        }
+
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+
 }

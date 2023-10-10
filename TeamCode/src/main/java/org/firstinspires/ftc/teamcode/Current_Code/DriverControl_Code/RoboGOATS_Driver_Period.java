@@ -100,10 +100,10 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power
             // And direction for Fast speed
-            double FleftFrontPower = .8*(axial + lateral + yaw);
-            double FrightFrontPower = .8*(axial - lateral - yaw);
-            double FleftBackPower = .8*(axial - lateral + yaw);
-            double FrightBackPower = .8*(axial + lateral - yaw);
+            double FleftFrontPower = .7*(axial + lateral + yaw);
+            double FrightFrontPower = .7*(axial - lateral - yaw);
+            double FleftBackPower = .7*(axial - lateral + yaw);
+            double FrightBackPower = .7*(axial + lateral - yaw);
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power
             // And direction for Slow speed
@@ -184,8 +184,6 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             }
 
             // Open arms
-            
-
             if (gamepad2.b) {
                 servoCL.setPosition(.12);
                 servoCR.setDirection(Servo.Direction.REVERSE);
@@ -193,19 +191,23 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             }
 
             if (ls < 0 ){
-                motorLSR.setPower(ls);
+                motorLSR.setPower(-ls);
+                motorLSL.setPower(ls);
             }
 
             if (ls > 0 && Touch.isPressed() ) {
                     motorLSR.setPower(0);
+                    motorLSL.setPower(0);
                 }
 
             if (ls >0 && !Touch.isPressed()){
-                motorLSR.setPower(ls*.8);
+                motorLSR.setPower(-ls*.8);
+                motorLSL.setPower(ls*.8);
                 }
 
             if (ls == 0) {
                 motorLSR.setPower(0);
+                motorLSL.setPower(0);
             }
 
         }
