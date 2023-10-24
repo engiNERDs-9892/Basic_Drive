@@ -22,10 +22,7 @@ public class AutoBR extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
-
-    private DcMotor motorLSR = null;
-
-    private DcMotor motorLSL = null;
+    private DcMotor motorLS = null;
     OpenCvWebcam webcam;
     Blue.SkystoneDeterminationPipeline pipeline;
     Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
@@ -87,8 +84,7 @@ public class AutoBR extends LinearOpMode {
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-        motorLSR = hardwareMap.get(DcMotor.class, "motorLSR");
-        motorLSL = hardwareMap.get(DcMotor.class, "motorLSL");
+        motorLS = hardwareMap.get(DcMotor.class, "motorLS");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -101,8 +97,8 @@ public class AutoBR extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLSR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
@@ -112,6 +108,9 @@ public class AutoBR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                right(0.25, 12);
+                back(0.25, 12);
+                //drop the thing
 
                 break;
 
@@ -120,14 +119,18 @@ public class AutoBR extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-
+                right(0.25, 24);
+                forward(0.25, 24);
+                //drop the thing
 
                 break;
             }
 
             case CENTER: // Level 2
             {
-
+                forward(0.25, 12);
+                right(0.25, 24);
+                //drop the thing
 
                 break;
             }
@@ -300,52 +303,52 @@ public class AutoBR extends LinearOpMode {
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
-        motorLSR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLS.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setTargetPosition(distance * in);
-        motorLSL.setTargetPosition(distance * in);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorLSR.setPower(-speed);
-        motorLSL.setPower(speed);
+        motorLS.setTargetPosition(distance * in);
+
+
+        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        motorLS.setPower(-speed);
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
     }
 
     public void lsDown(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
-        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorLSL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLS.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setTargetPosition(distance * in);
-        motorLSL.setTargetPosition(distance * in);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorLSR.setPower(-speed);
-        motorLSL.setPower(speed);
+        motorLS.setTargetPosition(distance * in);
+
+
+        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        motorLS.setPower(-speed);
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
     }
 

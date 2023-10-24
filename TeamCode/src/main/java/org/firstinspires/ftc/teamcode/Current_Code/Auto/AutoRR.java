@@ -22,8 +22,8 @@ public class AutoRR extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
-    private DcMotor motorLSR = null;
-    private DcMotor motorLSL = null;
+    private DcMotor motorLS = null;
+
 
     OpenCvWebcam webcam;
     Red.SkystoneDeterminationPipeline pipeline;
@@ -89,8 +89,8 @@ public class AutoRR extends LinearOpMode {
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-        motorLSR = hardwareMap.get(DcMotor.class, "motorLSR");
-        motorLSL = hardwareMap.get(DcMotor.class, "motorLSL");
+        motorLS = hardwareMap.get(DcMotor.class, "motorLSR");
+
 
 
 
@@ -114,7 +114,9 @@ public class AutoRR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-
+                right(0.25, 12);
+                back(0.25, 12);
+                //drop the thing
                 break;
 
             }
@@ -122,15 +124,18 @@ public class AutoRR extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-
-
+            forward(0.25, 24);
+            right(0.25, 24);
+            back(0.25, 12);
+            //drop the thing
                 break;
             }
 
             case CENTER: // Level 2
             {
-
-
+            forward(0.25, 12);
+            right(0.25, 24);
+            //drop the thing
                 break;
             }
         }
@@ -295,52 +300,53 @@ public class AutoRR extends LinearOpMode {
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
-        motorLSR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLS.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setTargetPosition(distance * in);
-        motorLSL.setTargetPosition(distance * in);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorLSR.setPower(-speed);
-        motorLSL.setPower(speed);
+        motorLS.setTargetPosition(distance * in);
+
+
+        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        motorLS.setPower(-speed);
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
     }
 
     public void lsDown(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
-        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorLSL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLS.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setTargetPosition(distance * in);
-        motorLSL.setTargetPosition(distance * in);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorLSR.setPower(-speed);
-        motorLSL.setPower(speed);
+        motorLS.setTargetPosition(distance * in);
+
+
+        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        motorLS.setPower(-speed);
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
-        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
     }
+
 }

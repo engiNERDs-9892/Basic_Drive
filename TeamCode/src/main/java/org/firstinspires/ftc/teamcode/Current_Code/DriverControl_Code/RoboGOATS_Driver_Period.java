@@ -16,9 +16,10 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
-    private DcMotor motorLSR;
-    private DcMotor motorLSL;
+    private DcMotor motorLS;
 
+    Servo servoRadial;
+    Servo servoLadial;
 
     // The Servo ____; are used to identify a servo that can be used throughout the code.
 
@@ -36,27 +37,28 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorBR = hardwareMap.dcMotor.get("motorBR");
-        motorLSR = hardwareMap.dcMotor.get("motorLSR");
-        motorLSL = hardwareMap.dcMotor.get("motorLSL");
+        motorLS = hardwareMap.dcMotor.get("motorLS");
+
 
         Touch = hardwareMap.get(TouchSensor.class, "Touchsensor");
         servoCL = hardwareMap.servo.get("servoCL");
         servoCR = hardwareMap.servo.get("servoCR");
+        servoRadial = hardwareMap.servo.get("servoRadial");
+        servoLadial = hardwareMap.servo.get("servoLadial");
 
-
-        motorLSR.setPower(0);
+        motorLS.setPower(0);
         motorFL.setPower(0);
         motorBL.setPower(0);
         motorFR.setPower(0);
         motorBR.setPower(0);
-        motorLSL.setPower(0);
+
 
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorFR.setDirection(DcMotor.Direction.FORWARD);
         motorBR.setDirection(DcMotor.Direction.FORWARD);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
-        motorLSR.setDirection(DcMotor.Direction.REVERSE);
-        motorLSL.setDirection(DcMotor.Direction.REVERSE);
+        motorLS.setDirection(DcMotor.Direction.REVERSE);
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -65,6 +67,9 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            int motorLSpos = motorLS.getCurrentPosition();
+
             // Variable used for Regular speed (To find the direction that the stick needs to be in)
             double max;
 
@@ -175,6 +180,16 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
                 motorBR.setPower(rightBackPower);
             }
 
+            if (gamepad2.x) {
+                servoRadial.setPosition(180);
+                servoLadial.setPosition(0);
+            }
+
+            if (gamepad2.y) {
+                servoRadial.setPosition(0);
+                servoLadial.setPosition(180);
+            }
+
 
             // close arms
             if (gamepad2.a) {
@@ -191,26 +206,36 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             }
 
             if (ls < 0 ){
-                motorLSR.setPower(-ls);
-                motorLSL.setPower(ls);
+                motorLS.setPower(ls);
+
             }
 
             if (ls > 0 && Touch.isPressed() ) {
-                    motorLSR.setPower(0);
-                    motorLSL.setPower(0);
+                    motorLS.setPower(0);
+
                 }
 
             if (ls >0 && !Touch.isPressed()){
-                motorLSR.setPower(-ls*.8);
-                motorLSL.setPower(ls*.8);
-                }
+                motorLS.setPower(ls*.8);
 
-            if (ls == 0) {
-                motorLSR.setPower(0);
-                motorLSL.setPower(0);
             }
 
+            if (ls == 0) {
+                motorLS.setPower(0);
+
+            }
+            if(motorLSpos < -11300){
+                motorLS.setPower(0);
+            }
+            if(motorLSpos > -150){
+                motorLS.setPower(0);
+            }
+
+
+            telemetry.addData("Position", motorLSpos);
+            telemetry.update();
         }
+
 
     }
 }
