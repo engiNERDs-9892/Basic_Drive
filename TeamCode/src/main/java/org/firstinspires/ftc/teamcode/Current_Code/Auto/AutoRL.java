@@ -112,27 +112,38 @@ public class AutoRL extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                right(0.25, 12);
-                back(0.25, 12);
+                left(.25, 30);
+                back(.25, 8);
                 //drop the thing
+                left(.25, 2);
+                forward(.25, 80);
+                left(.25, 6);
+
                 break;
+
 
             }
 
 
             case RIGHT: // Level 1
             {
-               right(0.25, 24);
-               forward(0.25, 24);
-            //drop the thing
+                left(.25, 30);
+                forward(.25, 16);
+                //drop the thing
+                left(.25, 2);
+                forward(.25, 64);
+                right(.25, 6);
+
                 break;
             }
 
             case CENTER: // Level 2
             {
-                forward(0.25, 12);
-                right(0.25, 24);
+                left(.25, 30);
+                forward(.25, 8);
                 //drop the thing
+                left(.25, 2);
+                forward(.25, 72);
 
                 break;
             }

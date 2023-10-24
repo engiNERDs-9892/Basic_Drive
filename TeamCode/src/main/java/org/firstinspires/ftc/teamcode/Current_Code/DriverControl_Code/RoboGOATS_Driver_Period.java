@@ -105,10 +105,10 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power
             // And direction for Fast speed
-            double FleftFrontPower = .7*(axial + lateral + yaw);
-            double FrightFrontPower = .7*(axial - lateral - yaw);
-            double FleftBackPower = .7*(axial - lateral + yaw);
-            double FrightBackPower = .7*(axial + lateral - yaw);
+            double FleftFrontPower = .7 * (axial + lateral + yaw);
+            double FrightFrontPower = .7 * (axial - lateral - yaw);
+            double FleftBackPower = .7 * (axial - lateral + yaw);
+            double FrightBackPower = .7 * (axial + lateral - yaw);
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power
             // And direction for Slow speed
@@ -116,7 +116,6 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             double SrightFrontPower = .25 * (axial - lateral - yaw);
             double SleftBackPower = .25 * (axial - lateral + yaw);
             double SrightBackPower = .25 * (axial + lateral - yaw);
-
 
 
             max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
@@ -205,18 +204,18 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
                 servoCR.setPosition(.12);
             }
 
-            if (ls < 0 ){
+            if (ls < 0) {
                 motorLS.setPower(ls);
 
             }
 
-            if (ls > 0 && Touch.isPressed() ) {
-                    motorLS.setPower(0);
+            if (ls > 0 && Touch.isPressed()) {
+                motorLS.setPower(0);
 
-                }
+            }
 
-            if (ls >0 && !Touch.isPressed()){
-                motorLS.setPower(ls*.8);
+            if (ls > 0 && !Touch.isPressed()) {
+                motorLS.setPower(ls * .8);
 
             }
 
@@ -224,19 +223,23 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
                 motorLS.setPower(0);
 
             }
-            if(motorLSpos < -11300){
+            if (motorLSpos < -11300 && ls<0 ) {
                 motorLS.setPower(0);
-            }
-            if(motorLSpos > -150){
-                motorLS.setPower(0);
+
             }
 
 
-            telemetry.addData("Position", motorLSpos);
-            telemetry.update();
+            if (motorLSpos > -150 && ls>0) {
+
+               motorLS.setPower(0);
+
+            }
+
+                telemetry.addData("Position", motorLSpos);
+                telemetry.update();
+
+
+
         }
-
-
-    }
-}
+    }}
 

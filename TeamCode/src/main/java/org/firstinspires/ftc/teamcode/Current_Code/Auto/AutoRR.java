@@ -22,14 +22,13 @@ public class AutoRR extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
+
+
+
     private DcMotor motorLS = null;
-
-
     OpenCvWebcam webcam;
     Red.SkystoneDeterminationPipeline pipeline;
     Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
-
-
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -50,7 +49,6 @@ public class AutoRR extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new Red.SkystoneDeterminationPipeline();
@@ -89,9 +87,7 @@ public class AutoRR extends LinearOpMode {
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-        motorLS = hardwareMap.get(DcMotor.class, "motorLSR");
-
-
+        motorLS = hardwareMap.get(DcMotor.class, "motorLS");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -105,6 +101,8 @@ public class AutoRR extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
@@ -124,22 +122,28 @@ public class AutoRR extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-            forward(0.25, 24);
-            right(0.25, 24);
-            back(0.25, 12);
+               right(0.25, 24);
+               forward(0.25, 24);
             //drop the thing
                 break;
             }
 
             case CENTER: // Level 2
             {
-            forward(0.25, 12);
-            right(0.25, 24);
-            //drop the thing
+                forward(0.25, 12);
+                right(0.25, 24);
+                //drop the thing
+
                 break;
             }
         }
+
     }
+
+
+
+
+
 
     public void forward(double speed, int distance) {
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
@@ -297,6 +301,7 @@ public class AutoRR extends LinearOpMode {
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
