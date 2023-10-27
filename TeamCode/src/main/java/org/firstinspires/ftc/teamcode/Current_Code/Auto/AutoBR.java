@@ -310,6 +310,45 @@ public class AutoBR extends LinearOpMode {
 
     }
 
+    public void turn180(double speed, int distance){
+
+        motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorFL.setTargetPosition(distance * in);
+        motorFR.setTargetPosition(distance * in);
+        motorBL.setTargetPosition(distance * in);
+        motorBR.setTargetPosition(distance * in);
+
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        motorBL.setPower(speed);
+        motorFL.setPower(speed);
+        motorBR.setPower(speed);
+        motorFR.setPower(speed);
+
+
+
+        while (opModeIsActive() && motorFL.isBusy()) {
+        }
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
