@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -23,6 +24,11 @@ public class AutoBR extends LinearOpMode {
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
     private DcMotor motorLS = null;
+    private Servo servoRadial;
+    private Servo servoLadial;
+    private Servo servoWR;
+    private Servo servoWL;
+
     OpenCvWebcam webcam;
     Blue.SkystoneDeterminationPipeline pipeline;
     Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
@@ -85,6 +91,10 @@ public class AutoBR extends LinearOpMode {
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
+        servoRadial = hardwareMap.servo.get("servoRadial");
+        servoLadial = hardwareMap.servo.get("servoLadial");
+        servoWR = hardwareMap.servo.get("servoWR");
+        servoWL = hardwareMap.servo.get("servoWL");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -317,6 +327,17 @@ public class AutoBR extends LinearOpMode {
 
         motorLS.setPower(-speed);
 
+        sleep(500);
+
+        servoRadial.setPosition(0);
+        servoLadial.setPosition(180);
+
+        sleep(500);
+
+        servoWR.setPosition(0);
+        servoWL.setPosition(180);
+
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -342,6 +363,17 @@ public class AutoBR extends LinearOpMode {
 
 
         motorLS.setPower(-speed);
+
+
+        sleep(500);
+
+        servoRadial.setPosition(180);
+        servoLadial.setPosition(0);
+
+        sleep(500);
+
+        servoWR.setPosition(180);
+        servoWL.setPosition(0);
 
 
         while (opModeIsActive() && motorFL.isBusy()) {

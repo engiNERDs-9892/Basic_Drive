@@ -21,10 +21,14 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
     Servo servoRadial;
     Servo servoLadial;
 
+
     // The Servo ____; are used to identify a servo that can be used throughout the code.
 
     Servo servoCL;
     Servo servoCR;
+
+    Servo servoWR;
+    Servo servoWL;
 
     TouchSensor Touch;
 
@@ -45,6 +49,9 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
         servoCR = hardwareMap.servo.get("servoCR");
         servoRadial = hardwareMap.servo.get("servoRadial");
         servoLadial = hardwareMap.servo.get("servoLadial");
+        servoWR = hardwareMap.servo.get("servoWR");
+        servoWL = hardwareMap.servo.get("servoWL");
+
 
         motorLS.setPower(0);
         motorFL.setPower(0);
@@ -182,11 +189,21 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             if (gamepad2.x) {
                 servoRadial.setPosition(180);
                 servoLadial.setPosition(0);
+
+                sleep(500);
+
+                servoWR.setPosition(180);
+                servoWL.setPosition(0);
             }
 
             if (gamepad2.y) {
                 servoRadial.setPosition(0);
                 servoLadial.setPosition(180);
+
+                sleep(500);
+
+                servoWR.setPosition(0);
+                servoWL.setPosition(180);
             }
 
 
@@ -215,7 +232,7 @@ public class RoboGOATS_Driver_Period extends LinearOpMode {
             }
 
             if (ls > 0 && !Touch.isPressed()) {
-                motorLS.setPower(ls * .8);
+                motorLS.setPower(ls * 1);
 
             }
 

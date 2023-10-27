@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -22,6 +23,10 @@ public class AutoRR extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
+    private Servo servoRadial;
+    private Servo servoLadial;
+    private Servo servoWR;
+    private Servo servoWL;
 
 
 
@@ -88,6 +93,11 @@ public class AutoRR extends LinearOpMode {
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
+        servoRadial = hardwareMap.servo.get("servoRadial");
+        servoLadial = hardwareMap.servo.get("servoLadial");
+        servoWR = hardwareMap.servo.get("servoWR");
+        servoWL = hardwareMap.servo.get("servoWL");
+
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -112,8 +122,8 @@ public class AutoRR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                right(0.25, 12);
-                back(0.25, 12);
+                left(.25, 30);
+                back(.25, 8);
                 //drop the thing
                 break;
 
@@ -122,16 +132,16 @@ public class AutoRR extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-               right(0.25, 24);
-               forward(0.25, 24);
+                left(.25, 30);
+                forward(.25, 16);
             //drop the thing
                 break;
             }
 
             case CENTER: // Level 2
             {
-                forward(0.25, 12);
-                right(0.25, 24);
+                left(.25, 30);
+                forward(.25, 8);
                 //drop the thing
 
                 break;
@@ -319,6 +329,16 @@ public class AutoRR extends LinearOpMode {
 
         motorLS.setPower(-speed);
 
+        sleep(500);
+
+        servoRadial.setPosition(0);
+        servoLadial.setPosition(180);
+
+        sleep(500);
+
+        servoWR.setPosition(0);
+        servoWL.setPosition(180);
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -344,6 +364,16 @@ public class AutoRR extends LinearOpMode {
 
 
         motorLS.setPower(-speed);
+
+        sleep(500);
+
+        servoRadial.setPosition(180);
+        servoLadial.setPosition(0);
+
+        sleep(500);
+
+        servoWR.setPosition(180);
+        servoWL.setPosition(0);
 
 
         while (opModeIsActive() && motorFL.isBusy()) {
