@@ -29,7 +29,7 @@ public class AutoBL extends LinearOpMode {
     private Servo servoWL;
 
     private DcMotor motorLS = null;
-    OpenCvWebcam webcam;
+    OpenCvWebcam webcamBlue;
     Blue.SkystoneDeterminationPipeline pipeline;
     Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
     int in = 45;
@@ -53,17 +53,17 @@ public class AutoBL extends LinearOpMode {
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcamBlue = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new Blue.SkystoneDeterminationPipeline();
-        webcam.setPipeline(pipeline);
+        webcamBlue.setPipeline(pipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcamBlue.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 // This is in what viewing window the camera is seeing through and it doesn't matter
                 // what orientation it is | UPRIGHT, SIDEWAYS_LEFT, SIDEWAYS_RIGHT, etc.
 
-                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+                webcamBlue.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override

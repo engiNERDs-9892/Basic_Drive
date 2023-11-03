@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Current_Code.DriverControl_Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -52,10 +53,10 @@ public class DriverPeriod extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
 
-        motorFL.setDirection(DcMotor.Direction.FORWARD);
-        motorFR.setDirection(DcMotor.Direction.REVERSE);
-        motorBR.setDirection(DcMotor.Direction.REVERSE);
-        motorBL.setDirection(DcMotor.Direction.FORWARD);
+        motorFL.setDirection(DcMotor.Direction.REVERSE);
+        motorFR.setDirection(DcMotor.Direction.FORWARD);
+        motorBR.setDirection(DcMotor.Direction.FORWARD);
+        motorBL.setDirection(DcMotor.Direction.REVERSE);
         motorLS.setDirection(DcMotor.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
@@ -63,7 +64,7 @@ public class DriverPeriod extends LinearOpMode {
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
 
@@ -79,63 +80,43 @@ public class DriverPeriod extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
 
-            // This button choice was made so that it is hard to hit on accident,
+            // This button choice was made so that it is hard to hit on accident
             // it can be freely changed based on preference.
-            // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.options) {
+
+            if (gamepad1.dpad_down) {
+                // sets facing direction 'forward'
                 imu.resetYaw();
             }
 
+            //arm stuff (ty violet's dad)
+            //also rotates wrist
             if (gamepad2.x) {
+                // moves the ar
+                // m down
                 servoRadial.setPosition(180);
                 servoLadial.setPosition(0);
 
-                sleep(500);
-
                 servoWR.setPosition(180);
                 servoWL.setPosition(0);
-            }
 
-            if (gamepad2.y) {
+            } else if (gamepad2.y) {
+                // moves the arm up
                 servoRadial.setPosition(0);
                 servoLadial.setPosition(180);
-
-                sleep(500);
 
                 servoWR.setPosition(0);
                 servoWL.setPosition(180);
             }
 
-
-            if (ls < 0) {
-                motorLS.setPower(ls);
-
-            }
-
-            if (ls > 0 ) {
+            // Linear slide logic
+            if ((ls == 0)  ||               // power off slide
+                (motorLSpos < -11300) ||    // max slide position
+                (motorLSpos > -150))        // min slide position
+            {
                 motorLS.setPower(0);
-
-            }
-
-            if (ls > 0 ) {
+            } else {
+                // move slide up for ls < 0, move slide down on ls > 0
                 motorLS.setPower(ls * 1);
-
-            }
-
-            if (ls == 0) {
-                motorLS.setPower(0);
-
-            }
-            if (motorLSpos < -11300 && ls<0 ) {
-                motorLS.setPower(0);
-
-            }
-
-
-            if (motorLSpos > -150 && ls>0) {
-
-                motorLS.setPower(0);
-
             }
 
             telemetry.addData("Position", motorLSpos);
