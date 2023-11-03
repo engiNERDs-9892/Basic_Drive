@@ -70,6 +70,13 @@ public class DriverPeriod extends LinearOpMode {
 
         waitForStart();
 
+        // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
