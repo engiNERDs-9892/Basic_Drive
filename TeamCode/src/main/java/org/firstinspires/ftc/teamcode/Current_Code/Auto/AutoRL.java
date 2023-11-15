@@ -1,4 +1,4 @@
-
+//EXAMPLE FOR OTHER AUTOS
 
 package org.firstinspires.ftc.teamcode.Current_Code.Auto;
 
@@ -27,6 +27,8 @@ public class AutoRL extends LinearOpMode {
     private Servo servoLadial;
     private Servo servoWR;
     private Servo servoWL;
+    private Servo servoCR;
+    private Servo servoCL;
 
     private DcMotor motorLS = null;
     OpenCvWebcam webcamRed;
@@ -119,9 +121,20 @@ public class AutoRL extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 left(.25, 30);
                 back(.25, 8);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
                 left(.25, 2);
                 forward(.25, 80);
                 left(.25, 6);
@@ -134,9 +147,20 @@ public class AutoRL extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 left(.25, 30);
                 forward(.25, 16);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
                 left(.25, 2);
                 forward(.25, 64);
                 right(.25, 6);
@@ -146,9 +170,20 @@ public class AutoRL extends LinearOpMode {
 
             case CENTER: // Level 2
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 left(.25, 30);
                 forward(.25, 8);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
                 left(.25, 2);
                 forward(.25, 72);
 
@@ -339,13 +374,13 @@ public class AutoRL extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(0);
-        servoLadial.setPosition(180);
+        servoRadial.setPosition(1);
+        servoLadial.setPosition(1);
 
         sleep(500);
 
-        servoWR.setPosition(0);
-        servoWL.setPosition(180);
+        servoWR.setPosition(1);
+        servoWL.setPosition(1);
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -373,13 +408,13 @@ public class AutoRL extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(180);
-        servoLadial.setPosition(0);
+        servoRadial.setPosition(-1);
+        servoLadial.setPosition(-1);
 
         sleep(500);
 
-        servoWR.setPosition(180);
-        servoWL.setPosition(0);
+        servoWR.setPosition(-1);
+        servoWL.setPosition(-1);
 
 
         while (opModeIsActive() && motorFL.isBusy()) {
@@ -388,6 +423,22 @@ public class AutoRL extends LinearOpMode {
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
+    }
+    public void wristUp(){
+        servoWR.setPosition(1);
+        servoWL.setPosition(1);
+    }
+    public void wristDown(){
+        servoWR.setPosition(-1);
+        servoWL.setPosition(-1);
+    }
+    public void openClaw(){
+        servoCR.setPosition(.2);
+        servoCL.setPosition(.2);
+    }
+    public void closeClaw(){
+        servoCR.setPosition(0);
+        servoCL.setPosition(0);
     }
 
 }

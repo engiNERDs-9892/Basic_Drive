@@ -29,6 +29,9 @@ public class AutoBR extends LinearOpMode {
     private Servo servoWR;
     private Servo servoWL;
 
+    private Servo servoCR;
+    private Servo servoCL;
+
     OpenCvWebcam webcamBlue;
     Blue.SkystoneDeterminationPipeline pipeline;
     Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
@@ -118,9 +121,20 @@ public class AutoBR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 right(0.25, 12);
                 back(0.25, 12);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
 
                 break;
 
@@ -129,18 +143,40 @@ public class AutoBR extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 right(0.25, 24);
                 forward(0.25, 24);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
 
                 break;
             }
 
             case CENTER: // Level 2
             {
+                //prep
+                wristUp();
+                sleep(500);
+
+                //go to target
                 forward(0.25, 12);
                 right(0.25, 24);
-                //drop the thing
+
+                //drop the pixel
+                wristDown();
+                openClaw();
+                wristUp();
+
+                //park
 
                 break;
             }
@@ -368,21 +404,18 @@ public class AutoBR extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(0);
-        servoLadial.setPosition(180);
+        servoRadial.setPosition(1);
+        servoLadial.setPosition(1);
 
         sleep(500);
 
-        servoWR.setPosition(0);
-        servoWL.setPosition(180);
-
-
+        servoWR.setPosition(1);
+        servoWL.setPosition(1);
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
     }
 
@@ -403,16 +436,15 @@ public class AutoBR extends LinearOpMode {
 
         motorLS.setPower(-speed);
 
+        sleep(500);
+
+        servoRadial.setPosition(-1);
+        servoLadial.setPosition(-1);
 
         sleep(500);
 
-        servoRadial.setPosition(180);
-        servoLadial.setPosition(0);
-
-        sleep(500);
-
-        servoWR.setPosition(180);
-        servoWL.setPosition(0);
+        servoWR.setPosition(-1);
+        servoWL.setPosition(-1);
 
 
         while (opModeIsActive() && motorFL.isBusy()) {
@@ -422,5 +454,20 @@ public class AutoBR extends LinearOpMode {
 
 
     }
-
+    public void wristUp(){
+        servoWR.setPosition(1);
+        servoWL.setPosition(1);
+    }
+    public void wristDown(){
+        servoWR.setPosition(-1);
+        servoWL.setPosition(-1);
+    }
+    public void openClaw(){
+        servoCR.setPosition(.2);
+        servoCL.setPosition(.2);
+    }
+    public void closeClaw(){
+        servoCR.setPosition(0);
+        servoCL.setPosition(0);
+    }
 }

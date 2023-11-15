@@ -58,6 +58,7 @@ public class DriverPeriod extends LinearOpMode {
         motorBR.setDirection(DcMotor.Direction.FORWARD);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
         motorLS.setDirection(DcMotor.Direction.REVERSE);
+        servoCR.setDirection(Servo.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "IMU");
@@ -95,27 +96,52 @@ public class DriverPeriod extends LinearOpMode {
                 imu.resetYaw();
             }
 
-            //arm stuff (ty violet's dad)
-            //also rotates wrist
-            if (gamepad2.x) {
-                // moves the ar
-                // m down
-                servoRadial.setPosition(180);
-                servoLadial.setPosition(0);
 
-                servoWR.setPosition(180);
-                servoWL.setPosition(0);
+            //CLAW//
 
-            } else if (gamepad2.y) {
-                // moves the arm up
-                servoRadial.setPosition(0);
-                servoLadial.setPosition(180);
-
-                servoWR.setPosition(0);
-                servoWL.setPosition(180);
+//close claw
+            if (gamepad2.a){
+                servoCL.setPosition(0);
+                servoCR.setPosition(0);
+            }
+//open claw
+            if(gamepad2.b){
+                servoCL.setPosition(.2);
+                servoCR.setPosition(.2);
             }
 
-            // Linear slide logic
+            //ARM//
+//arm up
+            if(gamepad2.y){
+                servoRadial.setPosition(1);
+                servoLadial.setPosition(1);
+
+//arm down
+            }else if ( gamepad2.x){
+                servoRadial.setPosition(-1);
+                servoLadial.setPosition(-1);
+            }
+
+
+            //WRIST//
+
+//wrist down
+            if(gamepad2.left_bumper){
+                servoWR.setPosition(-1);
+                servoWL.setPosition(-1);
+
+            }
+//wrist up
+            if(gamepad2.right_bumper){
+                servoWR.setPosition(1);
+                servoWL.setPosition(1);
+
+            }
+
+
+
+            // LINEAR SLIDE//
+
             if ((ls == 0)  ||               // power off slide
                 (motorLSpos < -11300) ||    // max slide position
                 (motorLSpos > -150))        // min slide position
