@@ -135,8 +135,8 @@ public class DriverPeriod extends LinearOpMode {
 
 //wrist down
             if (gamepad2.left_trigger != 0) {
-                servoWR.setPosition(.3);
-                servoWL.setPosition(.3);
+                servoWR.setPosition(.4);
+                servoWL.setPosition(.4);
 
             }
 //wrist up
