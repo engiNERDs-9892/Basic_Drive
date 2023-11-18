@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Current_Code.DriverControl_Code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -12,36 +13,40 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @TeleOp
+
 public class DriverPeriod extends LinearOpMode {
     private DcMotor motorLS;
+    private DcMotor motorFL;
+    private DcMotor motorFR;
+    private DcMotor motorBL;
+    private DcMotor motorBR;
+
 
     Servo servoRadial;
-    Servo servoLadial;
+
 
     // The Servo ____; are used to identify a servo that can be used throughout the code.
+    // Well thank you Dr. Obvious
 
     Servo servoCL;
     Servo servoCR;
     Servo servoWR;
     Servo servoWL;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
-        DcMotor motorFL = hardwareMap.dcMotor.get("motorFL");
-        DcMotor motorBL = hardwareMap.dcMotor.get("motorBL");
-        DcMotor motorFR = hardwareMap.dcMotor.get("motorFR");
-        DcMotor motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
         motorLS = hardwareMap.dcMotor.get("motorLS");
         servoCL = hardwareMap.servo.get("servoCL");
         servoCR = hardwareMap.servo.get("servoCR");
         servoRadial = hardwareMap.servo.get("servoRadial");
-        servoLadial = hardwareMap.servo.get("servoLadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
-
 
         motorLS.setPower(0);
         motorFL.setPower(0);
@@ -59,6 +64,9 @@ public class DriverPeriod extends LinearOpMode {
         motorBL.setDirection(DcMotor.Direction.REVERSE);
         motorLS.setDirection(DcMotor.Direction.REVERSE);
         servoCR.setDirection(Servo.Direction.REVERSE);
+        servoRadial.setDirection(Servo.Direction.REVERSE);
+        servoWR.setDirection(Servo.Direction.REVERSE);
+        servoWL.setDirection(Servo.Direction.FORWARD);
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "IMU");
@@ -80,8 +88,8 @@ public class DriverPeriod extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        while (opModeIsActive()) {
 
+        while (opModeIsActive()) {
             int motorLSpos = motorLS.getCurrentPosition();
             double ls = gamepad2.left_stick_y; // Slide up or down
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
@@ -95,7 +103,6 @@ public class DriverPeriod extends LinearOpMode {
                 // sets facing direction 'forward'
                 imu.resetYaw();
             }
-
 
             //CLAW//
 
@@ -111,46 +118,48 @@ public class DriverPeriod extends LinearOpMode {
             }
 
             //ARM//
+
 //arm up
-            if(gamepad2.y){
-                servoRadial.setPosition(1);
-                servoLadial.setPosition(1);
+            if(gamepad2.y) {
+                servoRadial.setPosition(.66);
 
-//arm down
-            }else if ( gamepad2.x){
-                servoRadial.setPosition(-1);
-                servoLadial.setPosition(-1);
             }
+//arm down
 
+            if ( gamepad2.x){
+                servoRadial.setPosition(.02);
+
+            }
 
             //WRIST//
 
 //wrist down
-            if(gamepad2.left_bumper){
-                servoWR.setPosition(-1);
-                servoWL.setPosition(-1);
+            if (gamepad2.left_trigger != 0) {
+                servoWR.setPosition(.3);
+                servoWL.setPosition(.3);
 
             }
 //wrist up
-            if(gamepad2.right_bumper){
-                servoWR.setPosition(1);
-                servoWL.setPosition(1);
-
+            else if (gamepad2.right_trigger !=0) {
+                servoWR.setPosition(.6);
+                servoWL.setPosition(.6);
+//wrist
+            } else {
+                servoWR.setPosition(.5);
+                servoWL.setPosition(.5);
             }
-
-
 
             // LINEAR SLIDE//
 
-            if ((ls == 0)  ||               // power off slide
-                (motorLSpos < -11300) ||    // max slide position
-                (motorLSpos > -150))        // min slide position
-            {
+            if (ls == 0) {
                 motorLS.setPower(0);
             } else {
                 // move slide up for ls < 0, move slide down on ls > 0
                 motorLS.setPower(ls * 1);
             }
+
+            // wheels//
+
 
             telemetry.addData("Position", motorLSpos);
             telemetry.update();
@@ -172,10 +181,19 @@ public class DriverPeriod extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            motorFL.setPower(.6 * frontLeftPower);
-            motorBL.setPower(.6 * backLeftPower);
-            motorFR.setPower(.6 * frontRightPower);
-            motorBR.setPower(.6 * backRightPower);
+            if (gamepad1.left_trigger  !=0) {
+                motorFL.setPower(.3 * frontLeftPower);
+                motorBL.setPower(.3 * backLeftPower);
+                motorFR.setPower(.3 * frontRightPower);
+                motorBR.setPower(.3 * backRightPower);
+            } else {
+                motorFL.setPower(.6 * frontLeftPower);
+                motorBL.setPower(.6 * backLeftPower);
+                motorFR.setPower(.6 * frontRightPower);
+                motorBR.setPower(.6 * backRightPower);
+            }
         }
+
     }
 }
+

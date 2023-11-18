@@ -97,6 +97,9 @@ public class AutoRL extends LinearOpMode {
         servoLadial = hardwareMap.servo.get("servoLadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
+        servoCL = hardwareMap.servo.get("servoCL");
+        servoCR = hardwareMap.servo.get("servoCL");
+
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -425,12 +428,12 @@ public class AutoRL extends LinearOpMode {
 
     }
     public void wristUp(){
-        servoWR.setPosition(1);
-        servoWL.setPosition(1);
+        servoWR.setPosition(.6);
+        servoWL.setPosition(.6);
     }
-    public void wristDown(){
-        servoWR.setPosition(-1);
-        servoWL.setPosition(-1);
+    public void wristDown() {
+        servoWR.setPosition(.4);
+        servoWL.setPosition(.4);
     }
     public void openClaw(){
         servoCR.setPosition(.2);

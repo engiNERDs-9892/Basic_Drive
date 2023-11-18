@@ -425,12 +425,12 @@ public class AutoRR extends LinearOpMode {
 
     }
     public void wristUp(){
-        servoWR.setPosition(1);
-        servoWL.setPosition(1);
+        servoWR.setPosition(.6);
+        servoWL.setPosition(.6);
     }
-    public void wristDown(){
-        servoWR.setPosition(-1);
-        servoWL.setPosition(-1);
+    public void wristDown() {
+        servoWR.setPosition(.4);
+        servoWL.setPosition(.4);
     }
     public void openClaw(){
         servoCR.setPosition(.2);
