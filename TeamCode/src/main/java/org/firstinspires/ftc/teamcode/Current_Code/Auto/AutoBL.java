@@ -3,6 +3,8 @@
 package org.firstinspires.ftc.teamcode.Current_Code.Auto;
 
 
+import androidx.core.provider.FontRequest;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -105,8 +107,6 @@ public class AutoBL extends LinearOpMode {
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
 
-
-
         // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -123,227 +123,171 @@ public class AutoBL extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+
                 //prep
-                wristUp();
-                sleep(500);
+                Radial();
+                sleep(100);
 
                 //go to target
-                right(0.25, 12);
-                back(0.25, 12);
-
-                //drop the pixel
-                wristDown();
+                Move(directions.LEFT,26, .25);
+                sleep(500);
                 openClaw();
-                wristUp();
 
+                sleep(500);
+
+                Move(directions.RIGHT,24, .25);
+                Move(directions.BACKWARDS,12, .25);
                 //park
-
                 break;
 
             }
 
-
             case RIGHT: // Level 1
             {
+
                 //prep
-                wristUp();
-                sleep(500);
+                Radial();
+                sleep(100);
 
                 //got to target
-                right(0.25, 24);
-                forward(0.25, 24);
+                Move(directions.RIGHT,26, .25);
+                Move(directions.FORWARDS,24, .25);
+                sleep(500);
 
                 //drop the pixel
-                wristDown();
                 openClaw();
-                wristUp();
 
                 //park
-
+                Move(directions.BACKWARDS, 30, .25);
+                Move(directions.RIGHT,24, .3);
                 break;
+
             }
 
             case CENTER: // Level 2
             {
-                //prep
-                wristUp();
-                sleep(500);
 
-                //go to target
-                forward(0.25, 12);
-                right(0.25, 24);
+                //move to target
+                Move(directions.CLOCKWISE, 30, .25);
+                Move(directions.BACKWARDS, 26, .25);
 
                 //drop the pixel
-                wristDown();
+                sleep(500);
                 openClaw();
-                wristUp();
+                sleep(500);
 
                 //park
+                Move(directions.CLOCKWISE, 30, .25);
+                Move(directions.FORWARDS, 78, .25);
+                Move(directions.LEFT, 30, .25);
 
-                break;
             }
         }
-
     }
 
 
 
 
 
-    public void forward(double speed, int distance) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-
+    private void Move(directions direction, int target, double speed) {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        motorFL.setTargetPosition(distance * in);
-        motorFR.setTargetPosition(distance * in);
-        motorBL.setTargetPosition(distance * in);
-        motorBR.setTargetPosition(distance * in);
 
+        // This sets the direction for the motor for the wheels to drive forward
+        if (direction == directions.FORWARDS) {
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+
+        // Sets the motor direction to move Backwards
+        else if (direction == directions.BACKWARDS) {
+            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
+        // Sets the motor direction to move to the Left ( Note * Port = Left)
+        else if (direction == directions.LEFT) {
+            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
+        // Sets the motor direction to move to the Right (Note * Starboard = Right)
+        else if (direction == directions.RIGHT) {
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        else if (direction == directions.CLOCKWISE) {
+            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        else if (direction == directions.COUNTERCLOCKWISE) {
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
+        // Gives it a position to run to
+        motorFL.setTargetPosition(target * in);
+        motorFR.setTargetPosition(target * in);
+        motorBL.setTargetPosition(target * in);
+        motorBR.setTargetPosition(target * in);
+
+        // tells it to go to the position that is set
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorBL.setPower(speed);
+        // the motor speed for Wheels
         motorFL.setPower(speed);
-        motorBR.setPower(speed);
         motorFR.setPower(speed);
+        motorBL.setPower(speed);
+        motorBR.setPower(speed);
 
 
-
-        while (opModeIsActive() && motorFL.isBusy()) {
+        // While loop keeps the code running until motors reach the desired position
+        while (opModeIsActive() && ((motorFL.isBusy() || motorFR.isBusy()))) {
         }
-
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-    public void back(double speed, int distance) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
+    enum directions {
+        FORWARDS,
+        BACKWARDS,
+        LEFT,
+        RIGHT,
+        CLOCKWISE,
+        COUNTERCLOCKWISE
+    }
+
+
+
+
+
+    public void cclockwise() {
 
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorFL.setTargetPosition(distance * in);
-        motorFR.setTargetPosition(distance * in);
-        motorBL.setTargetPosition(distance * in);
-        motorBR.setTargetPosition(distance * in);
-
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        motorBL.setPower(speed);
-        motorFL.setPower(speed);
-        motorBR.setPower(speed);
-        motorFR.setPower(speed);
-
-
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-    public void right(double speed, int distance) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorFL.setTargetPosition(distance * in);
-        motorFR.setTargetPosition(distance * in);
-        motorBL.setTargetPosition(distance * in);
-        motorBR.setTargetPosition(distance * in);
-
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        motorBL.setPower(speed);
-        motorFL.setPower(speed);
-        motorBR.setPower(speed);
-        motorFR.setPower(speed);
-
-
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-    public void left(double speed, int distance) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
         motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorFL.setTargetPosition(distance * in);
-        motorFR.setTargetPosition(distance * in);
-        motorBL.setTargetPosition(distance * in);
-        motorBR.setTargetPosition(distance * in);
-
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        motorBL.setPower(speed);
-        motorFL.setPower(speed);
-        motorBR.setPower(speed);
-        motorFR.setPower(speed);
-
-
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
@@ -374,8 +318,6 @@ public class AutoBL extends LinearOpMode {
         motorBR.setPower(speed);
         motorFR.setPower(speed);
 
-
-
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
@@ -387,19 +329,16 @@ public class AutoBL extends LinearOpMode {
     }
 
     public void lsUp(double speed, int distance){
+
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
         motorLS.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         motorLS.setTargetPosition(distance * in);
 
-
         motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
         motorLS.setPower(-speed);
 
@@ -421,19 +360,16 @@ public class AutoBL extends LinearOpMode {
     }
 
     public void lsDown(double speed, int distance){
+
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
         motorLS.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
         motorLS.setTargetPosition(distance * in);
 
-
         motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
         motorLS.setPower(-speed);
 
@@ -447,29 +383,58 @@ public class AutoBL extends LinearOpMode {
         servoWR.setPosition(-1);
         servoWL.setPosition(-1);
 
-
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
     }
+
+    //unused because it was written for an un-continous servo
     public void wristUp(){
+
         servoWR.setPosition(.6);
         servoWL.setPosition(.6);
+
     }
+
+    //unused because it was written for an un-continuous servo
     public void wristDown(){
+
         servoWR.setPosition(.4);
         servoWL.setPosition(.4);
+
     }
+
+    //sets continuous servo internal position (where the servo thinks it is)
+    public void resetWrist(){
+
+        servoWR.setPosition(.5);
+        servoWL.setPosition(.5);
+
+    }
+
+    //opens claw
     public void openClaw(){
+
         servoCR.setPosition(.2);
         servoCL.setPosition(.2);
+
     }
+
+    //closes claw
     public void closeClaw(){
+
         servoCR.setPosition(0);
         servoCL.setPosition(0);
+
+    }
+
+    //lifts the arm so it doesn't drag
+    public void Radial(){
+
+        servoLadial.setPosition(.03);
+
     }
 
 }

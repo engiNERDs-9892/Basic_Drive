@@ -126,67 +126,59 @@ public class AutoRR extends LinearOpMode {
             case LEFT: // Level 3
             {
                 //prep
-                wristUp();
+                Radial();
+                sleep(100);
+
+                //got to target
+                left(0.25, 26);
                 sleep(500);
 
-                //go to target
-                left(.25, 30);
-                back(.25, 6);
-
                 //drop the pixel
-                wristDown();
                 openClaw();
-                wristUp();
 
                 //park
-                left(.25, 24);
-                forward(.25, 46);
-
+                right(.25, 24);
+                forward(.25, 78);
                 break;
             }
 
             case RIGHT: // Level 1
             {
                 //prep
-                wristUp();
-                sleep(500);
+                Radial();
+                sleep(100);
 
                 //go to target
-                forward(.25, 18);
-                left(.25, 24);
+                left(0.25, 26);
+                forward(.25, 24);
+                sleep(500);
+                openClaw();
+
                 sleep(500);
 
-                //drop the pixel
-                wristDown();
-                openClaw();
-                wristUp();
-
+                right(.25, 24);
+                forward(.25, 54);
                 //park
-                left(.25, 25);
-                forward(.25, 25);
-                //drop pixel
                 break;
             }
 
             case CENTER: // Level 2
             {
                 //prep
-                wristUp();
-                sleep(500);
+                Radial();
+                sleep(100);
 
                 //go to target
                 forward(.25, 8);
-                left(.25, 30);
+                right(.25, 30);
+                sleep(500);
 
                 //drop the pixel
-                wristDown();
                 openClaw();
-                wristUp();
 
                 //park
                 left(.25, 24);
                 forward(.25, 25);
-
                 break;
             }
         }
@@ -439,5 +431,8 @@ public class AutoRR extends LinearOpMode {
     public void closeClaw(){
         servoCR.setPosition(0);
         servoCL.setPosition(0);
+    }
+    public void Radial(){
+        servoLadial.setPosition(.03);
     }
 }

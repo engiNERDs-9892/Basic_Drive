@@ -182,15 +182,15 @@ public class DriverPeriod extends LinearOpMode {
             double backRightPower = (rotY + rotX - rx) / denominator;
 
             if (gamepad1.left_trigger  !=0) {
+                motorFL.setPower(.65 * frontLeftPower);
+                motorBL.setPower(.65 * backLeftPower);
+                motorFR.setPower(.65 * frontRightPower);
+                motorBR.setPower(.65 * backRightPower);
+            } else {
                 motorFL.setPower(.3 * frontLeftPower);
                 motorBL.setPower(.3 * backLeftPower);
                 motorFR.setPower(.3 * frontRightPower);
                 motorBR.setPower(.3 * backRightPower);
-            } else {
-                motorFL.setPower(.6 * frontLeftPower);
-                motorBL.setPower(.6 * backLeftPower);
-                motorFR.setPower(.6 * frontRightPower);
-                motorBR.setPower(.6 * backRightPower);
             }
         }
 
