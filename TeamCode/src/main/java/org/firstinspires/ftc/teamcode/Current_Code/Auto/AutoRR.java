@@ -130,16 +130,19 @@ public class AutoRR extends LinearOpMode {
                 sleep(100);
 
                 //go to target
-                Move(directions.LEFT, 27, 0.25);
-                Move(directions.BACKWARDS, 3, 0.26);
+                Move(directions.LEFT, 40, .25);
+                sleep(500);
+                Move(directions.BACKWARDS, 5, .25);
 
-                //drop
+                //drop the pixel
+                sleep(1000);
                 openClaw();
+                sleep(500);
 
                 //park
-                Move(directions.FORWARDS, 50, .25);
-                Move(directions.LEFT, 24, .25);
-
+                Move(directions.FORWARDS, 48, .25);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 12, .25);
                 break;
             }
 

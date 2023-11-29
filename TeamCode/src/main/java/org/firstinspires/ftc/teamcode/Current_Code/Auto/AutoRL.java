@@ -88,10 +88,10 @@ public class AutoRL extends LinearOpMode {
         telemetry.update();
 
         // Initialize the drive system variables.
-        motorFR = hardwareMap.get(DcMotor.class, "motorFR");
-        motorFL = hardwareMap.get(DcMotor.class, "motorFL");
-        motorBR = hardwareMap.get(DcMotor.class, "motorBR");
-        motorBL = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFR = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFL = hardwareMap.get(DcMotor.class, "motorBR");
+        motorBR = hardwareMap.get(DcMotor.class, "motorFL");
+        motorBL = hardwareMap.get(DcMotor.class, "motorFR");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
         servoRadial = hardwareMap.servo.get("servoRadial");
         servoLadial = hardwareMap.servo.get("servoLadial");
@@ -130,17 +130,19 @@ public class AutoRL extends LinearOpMode {
                 sleep(100);
 
                 //go to target
-                Move(directions.LEFT, 26);
+                Move(directions.LEFT, 40, .25);
                 sleep(500);
-
+                Move(directions.BACKWARDS, 5, .25);
 
                 //drop the pixel
+                sleep(1000);
                 openClaw();
                 sleep(500);
 
                 //park
-                forward(.25, 78);
-                right(.25, 24);
+                Move(directions.FORWARDS, 78, .25);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 12, .25);
                 break;
 
             }
@@ -153,8 +155,9 @@ public class AutoRL extends LinearOpMode {
                 sleep(500);
 
                 //go to target
-                left(0.25, 26);
-                forward(.25, 24);
+                Move(directions.LEFT, 29, .25);
+                Move(directions.FORWARDS, 20, .25);
+                Move(directions.LEFT, 6, .25);
                 sleep(500);
 
                 //drop the pixel
@@ -162,17 +165,27 @@ public class AutoRL extends LinearOpMode {
                 sleep(500);
 
                 //park
-                forward(.25, 54);
-                right(.25,24);
+                Move(directions.FORWARDS, 54, .25);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 6, .25);
                 break;
             }
 
             case CENTER: // Level 2
             {
 
-                sleep(12000);
-                forward(.25, 90);
+                Move(directions.LEFT, 35, .25);
+                Move(directions.COUNTERCLOCKWISE, 24, .25);
+                Move(directions.BACKWARDS, 9, .25);
+                sleep(1000);
+                openClaw();
+                sleep(1000);
 
+                //park
+                Move(directions.FORWARDS, 5, .25);
+                Move(directions.LEFT, 90, .25);
+                Move(directions.BACKWARDS, 26, .25);
+                Move(directions.LEFT, 26, .25);
                 break;
 
             }
@@ -346,7 +359,7 @@ public class AutoRL extends LinearOpMode {
         servoWL.setPosition(.4);
     }
     public void openClaw(){
-        servoCR.setPosition(.2);
+        servoCR.setPosition(.3);
         servoCL.setPosition(.2);
     }
     public void closeClaw(){
