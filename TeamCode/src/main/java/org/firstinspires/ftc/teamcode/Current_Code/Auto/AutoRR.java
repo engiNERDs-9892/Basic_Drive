@@ -1,5 +1,3 @@
-
-
 package org.firstinspires.ftc.teamcode.Current_Code.Auto;
 
 
@@ -24,19 +22,16 @@ public class AutoRR extends LinearOpMode {
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
     private Servo servoRadial;
-    private Servo servoLadial;
+
     private Servo servoWR;
     private Servo servoWL;
-
     private Servo servoCR;
     private Servo servoCL;
-
-
 
     private DcMotor motorLS = null;
     OpenCvWebcam webcamRed;
     Red.SkystoneDeterminationPipeline pipeline;
-    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -91,15 +86,16 @@ public class AutoRR extends LinearOpMode {
         telemetry.update();
 
         // Initialize the drive system variables.
-        motorFR = hardwareMap.get(DcMotor.class, "motorFR");
-        motorFL = hardwareMap.get(DcMotor.class, "motorFL");
-        motorBR = hardwareMap.get(DcMotor.class, "motorBR");
-        motorBL = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFR = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFL = hardwareMap.get(DcMotor.class, "motorBR");
+        motorBR = hardwareMap.get(DcMotor.class, "motorFL");
+        motorBL = hardwareMap.get(DcMotor.class, "motorFR");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
         servoRadial = hardwareMap.servo.get("servoRadial");
-        servoLadial = hardwareMap.servo.get("servoLadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
+        servoCL = hardwareMap.servo.get("servoCL");
+        servoCR = hardwareMap.servo.get("servoCL");
 
 
 
@@ -125,70 +121,83 @@ public class AutoRR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+
                 //prep
-                Radial();
+                closeClaw();
                 sleep(100);
 
                 //go to target
-                Move(directions.LEFT, 40, .25);
-                sleep(500);
-                Move(directions.BACKWARDS, 5, .25);
+                Move(directions.LEFT, 32, .25);
+                Move(directions.BACKWARDS, 6, .25);
+                Move(directions.LEFT, 2, .25);
 
                 //drop the pixel
                 sleep(1000);
                 openClaw();
                 sleep(500);
+                sleep(500);
+                Move(directions.RIGHT, 2, .25);
+
 
                 //park
-                Move(directions.FORWARDS, 48, .25);
-                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 42, .25);
+                Move(directions.LEFT, 27, .25);
                 Move(directions.FORWARDS, 12, .25);
                 break;
+
             }
+
 
             case RIGHT: // Level 1
             {
                 //prep
-                Radial();
-                sleep(100);
+                closeClaw();
+                sleep(500);
 
                 //go to target
-                Move(directions.LEFT, 27, 0.25);
-                Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 32, .25);
+                Move(directions.FORWARDS, 18, .25);
+                sleep(500);
 
-                //drop
+                //drop the pixel
                 openClaw();
+                sleep(500);
 
                 //park
-                Move(directions.LEFT, 24, 0.25);
-                Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 27, .25);
+                Move(directions.FORWARDS, 27, .25);
 
                 break;
             }
 
             case CENTER: // Level 2
             {
+
                 //prep
-                Radial();
-                sleep(100);
+                closeClaw();
+                sleep(500);
 
                 //go to target
-                Move(directions.LEFT, 27, 0.25);
-                Move(directions.FORWARDS, 6, .25);
+                Move(directions.LEFT, 35, .25);
+                Move(directions.COUNTERCLOCKWISE, 24, .25);
+                Move(directions.BACKWARDS, 1, .25);
 
-                //drop
+                //drop the pixel
+                sleep(1000);
                 openClaw();
+                sleep(1000);
+
 
                 //park
-                Move(directions.LEFT, 12, 0.25);
-                Move(directions.FORWARDS, 36, .25);
-
+                Move(directions.LEFT, 24, .25);
+                Move(directions.BACKWARDS, 20, .25);
+                Move(directions.LEFT, 24, .25);
                 break;
+
             }
         }
 
     }
-
 
     private void Move(directions direction, int target, double speed) {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -277,6 +286,7 @@ public class AutoRR extends LinearOpMode {
         CLOCKWISE,
         COUNTERCLOCKWISE
     }
+
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
@@ -296,13 +306,10 @@ public class AutoRR extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(1);
-        servoLadial.setPosition(1);
 
-        sleep(500);
 
-        servoWR.setPosition(1);
-        servoWL.setPosition(1);
+
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -330,13 +337,11 @@ public class AutoRR extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(-1);
-        servoLadial.setPosition(-1);
 
-        sleep(500);
 
-        servoWR.setPosition(-1);
-        servoWL.setPosition(-1);
+
+
+
 
 
         while (opModeIsActive() && motorFL.isBusy()) {
@@ -355,7 +360,7 @@ public class AutoRR extends LinearOpMode {
         servoWL.setPosition(.4);
     }
     public void openClaw(){
-        servoCR.setPosition(.2);
+        servoCR.setPosition(.3);
         servoCL.setPosition(.2);
     }
     public void closeClaw(){
@@ -363,6 +368,8 @@ public class AutoRR extends LinearOpMode {
         servoCL.setPosition(0);
     }
     public void Radial(){
-        servoLadial.setPosition(.03);
+
+        servoRadial.setPosition(.03);
     }
+
 }

@@ -1,5 +1,3 @@
-//EXAMPLE FOR OTHER AUTOS
-
 package org.firstinspires.ftc.teamcode.Current_Code.Auto;
 
 
@@ -24,7 +22,7 @@ public class AutoRL extends LinearOpMode {
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
     private Servo servoRadial;
-    private Servo servoLadial;
+
     private Servo servoWR;
     private Servo servoWL;
     private Servo servoCR;
@@ -33,7 +31,7 @@ public class AutoRL extends LinearOpMode {
     private DcMotor motorLS = null;
     OpenCvWebcam webcamRed;
     Red.SkystoneDeterminationPipeline pipeline;
-    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -94,7 +92,6 @@ public class AutoRL extends LinearOpMode {
         motorBL = hardwareMap.get(DcMotor.class, "motorFR");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
         servoRadial = hardwareMap.servo.get("servoRadial");
-        servoLadial = hardwareMap.servo.get("servoLadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
         servoCL = hardwareMap.servo.get("servoCL");
@@ -126,20 +123,22 @@ public class AutoRL extends LinearOpMode {
             {
 
                 //prep
-                Radial();
+                closeClaw();
                 sleep(100);
 
                 //go to target
                 Move(directions.LEFT, 40, .25);
                 sleep(500);
-                Move(directions.BACKWARDS, 5, .25);
+                Move(directions.BACKWARDS, 3, .25);
 
                 //drop the pixel
                 sleep(1000);
                 openClaw();
                 sleep(500);
 
+
                 //park
+                Move(directions.RIGHT, 6, .25);
                 Move(directions.FORWARDS, 78, .25);
                 Move(directions.RIGHT, 24, .25);
                 Move(directions.FORWARDS, 12, .25);
@@ -151,7 +150,7 @@ public class AutoRL extends LinearOpMode {
             case RIGHT: // Level 1
             {
                 //prep
-                Radial();
+                closeClaw();
                 sleep(500);
 
                 //go to target
@@ -166,7 +165,7 @@ public class AutoRL extends LinearOpMode {
 
                 //park
                 Move(directions.FORWARDS, 54, .25);
-                Move(directions.RIGHT, 24, .25);
+                Move(directions.RIGHT, 26, .25);
                 Move(directions.FORWARDS, 6, .25);
                 break;
             }
@@ -174,18 +173,26 @@ public class AutoRL extends LinearOpMode {
             case CENTER: // Level 2
             {
 
+                //prep
+                closeClaw();
+                sleep(500);
+
+                //go to target
                 Move(directions.LEFT, 35, .25);
                 Move(directions.COUNTERCLOCKWISE, 24, .25);
-                Move(directions.BACKWARDS, 9, .25);
+                Move(directions.BACKWARDS, 1, .25);
+
+                //drop the pixel
                 sleep(1000);
                 openClaw();
                 sleep(1000);
+
 
                 //park
                 Move(directions.FORWARDS, 5, .25);
                 Move(directions.LEFT, 90, .25);
                 Move(directions.BACKWARDS, 26, .25);
-                Move(directions.LEFT, 26, .25);
+                Move(directions.LEFT, 20, .25);
                 break;
 
             }
@@ -300,13 +307,10 @@ public class AutoRL extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(1);
-        servoLadial.setPosition(1);
 
-        sleep(500);
 
-        servoWR.setPosition(1);
-        servoWL.setPosition(1);
+
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -334,13 +338,11 @@ public class AutoRL extends LinearOpMode {
 
         sleep(500);
 
-        servoRadial.setPosition(-1);
-        servoLadial.setPosition(-1);
 
-        sleep(500);
 
-        servoWR.setPosition(-1);
-        servoWL.setPosition(-1);
+
+
+
 
 
         while (opModeIsActive() && motorFL.isBusy()) {
@@ -367,7 +369,8 @@ public class AutoRL extends LinearOpMode {
         servoCL.setPosition(0);
     }
     public void Radial(){
-        servoLadial.setPosition(.03);
+
+        servoRadial.setPosition(.03);
     }
 
 }

@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Current_Code.DriverControl_Code;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,24 +12,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 
-public class DriverPeriod extends LinearOpMode {
+public class Driver_Red extends LinearOpMode {
     private DcMotor motorLS;
     private DcMotor motorFL;
     private DcMotor motorFR;
     private DcMotor motorBL;
     private DcMotor motorBR;
-
+    private DcMotor motorHL;
 
     Servo servoRadial;
-
-
-    // The Servo ____; are used to identify a servo that can be used throughout the code.
-    // Well thank you Dr. Obvious
-
     Servo servoCL;
     Servo servoCR;
     Servo servoWR;
     Servo servoWL;
+    Servo servoDrone;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -42,6 +36,7 @@ public class DriverPeriod extends LinearOpMode {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorLS = hardwareMap.dcMotor.get("motorLS");
+        motorHL = hardwareMap.dcMotor.get("motorHL");
         servoCL = hardwareMap.servo.get("servoCL");
         servoCR = hardwareMap.servo.get("servoCR");
         servoRadial = hardwareMap.servo.get("servoRadial");
@@ -53,6 +48,7 @@ public class DriverPeriod extends LinearOpMode {
         motorBL.setPower(0);
         motorFR.setPower(0);
         motorBR.setPower(0);
+        motorHL.setPower(0);
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -63,6 +59,7 @@ public class DriverPeriod extends LinearOpMode {
         motorBR.setDirection(DcMotor.Direction.FORWARD);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
         motorLS.setDirection(DcMotor.Direction.REVERSE);
+        motorHL.setDirection(DcMotor.Direction.FORWARD);
         servoCR.setDirection(Servo.Direction.REVERSE);
         servoRadial.setDirection(Servo.Direction.REVERSE);
         servoWR.setDirection(Servo.Direction.REVERSE);
@@ -157,6 +154,19 @@ public class DriverPeriod extends LinearOpMode {
                 // move slide up for ls < 0, move slide down on ls > 0
                 motorLS.setPower(ls * 1);
             }
+//hook
+            if(gamepad2.right_stick_y>0){
+                motorHL.setPower(1);
+            }else if(gamepad2.right_stick_y<0){
+                motorHL.setPower(-1);
+            }else{
+                motorHL.setPower(0);
+            }
+
+            //drone
+            if(gamepad1.a){
+                servoDrone.setPosition(.4);
+            }
 
             // wheels//
 
@@ -182,15 +192,15 @@ public class DriverPeriod extends LinearOpMode {
             double backRightPower = (rotY + rotX - rx) / denominator;
 
             if (gamepad1.left_trigger  !=0) {
-                motorFL.setPower(.65 * frontLeftPower);
-                motorBL.setPower(.65 * backLeftPower);
-                motorFR.setPower(.65 * frontRightPower);
-                motorBR.setPower(.65 * backRightPower);
-            } else {
                 motorFL.setPower(.3 * frontLeftPower);
                 motorBL.setPower(.3 * backLeftPower);
                 motorFR.setPower(.3 * frontRightPower);
                 motorBR.setPower(.3 * backRightPower);
+            } else {
+                motorFL.setPower(.65 * frontLeftPower);
+                motorBL.setPower(.65 * backLeftPower);
+                motorFR.setPower(.65 * frontRightPower);
+                motorBR.setPower(.65 * backRightPower);
             }
         }
 

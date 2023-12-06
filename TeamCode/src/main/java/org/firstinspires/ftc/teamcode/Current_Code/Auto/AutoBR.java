@@ -1,5 +1,3 @@
-
-
 package org.firstinspires.ftc.teamcode.Current_Code.Auto;
 
 
@@ -23,21 +21,22 @@ public class AutoBR extends LinearOpMode {
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
-    private DcMotor motorLS = null;
     private Servo servoRadial;
-    private Servo servoLadial;
+
     private Servo servoWR;
     private Servo servoWL;
     private Servo servoCR;
     private Servo servoCL;
 
+    private DcMotor motorLS = null;
     OpenCvWebcam webcamBlue;
     Blue.SkystoneDeterminationPipeline pipeline;
-    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
+
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -50,10 +49,11 @@ public class AutoBR extends LinearOpMode {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
+
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcamBlue = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcamBlue = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
         pipeline = new Blue.SkystoneDeterminationPipeline();
         webcamBlue.setPipeline(pipeline);
 
@@ -62,46 +62,47 @@ public class AutoBR extends LinearOpMode {
             public void onOpened() {
                 // This is in what viewing window the camera is seeing through and it doesn't matter
                 // what orientation it is | UPRIGHT, SIDEWAYS_LEFT, SIDEWAYS_RIGHT, etc.
-
                 webcamBlue.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
             public void onError(int errorCode) {
             }
-
         });
 
         while (!isStarted() && !isStopRequested()) {
-
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
-
         }
 
         snapshotAnalysis = pipeline.getAnalysis();
+
 
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
         // Initialize the drive system variables.
-        motorFR = hardwareMap.get(DcMotor.class, "motorFR");
-        motorFL = hardwareMap.get(DcMotor.class, "motorFL");
-        motorBR = hardwareMap.get(DcMotor.class, "motorBR");
-        motorBL = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFR = hardwareMap.get(DcMotor.class, "motorBL");
+        motorFL = hardwareMap.get(DcMotor.class, "motorBR");
+        motorBR = hardwareMap.get(DcMotor.class, "motorFL");
+        motorBL = hardwareMap.get(DcMotor.class, "motorFR");
         motorLS = hardwareMap.get(DcMotor.class, "motorLS");
         servoRadial = hardwareMap.servo.get("servoRadial");
-        servoLadial = hardwareMap.servo.get("servoLadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
         servoCL = hardwareMap.servo.get("servoCL");
+        servoCR = hardwareMap.servo.get("servoCL");
+
+
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+
+
 
         // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -109,6 +110,7 @@ public class AutoBR extends LinearOpMode {
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
@@ -118,13 +120,13 @@ public class AutoBR extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-
                 //prep
-                Radial();
+                closeClaw();
                 sleep(500);
 
                 //go to target
-                Move(directions.LEFT, 26, .25);
+                Move(directions.RIGHT, 32, .25);
+                Move(directions.FORWARDS, 18, .25);
                 sleep(500);
 
                 //drop the pixel
@@ -132,32 +134,37 @@ public class AutoBR extends LinearOpMode {
                 sleep(500);
 
                 //park
-                Move(directions.RIGHT, 24, 25);
-                Move(directions.BACKWARDS, 78, .25);
+                Move(directions.FORWARDS, 69, .25);
+                Move(directions.RIGHT, 12, .25);
+
                 break;
 
             }
 
 
-            case RIGHT: // Level 1s
+            case RIGHT: // Level 1
             {
-
                 //prep
-                Radial();
+                closeClaw();
                 sleep(100);
 
                 //go to target
-                Move(directions.LEFT, 26, .25);
-                Move(directions.FORWARDS, 24, .25);
+                Move(directions.RIGHT, 32, .25);
+                Move(directions.BACKWARDS, 6, .25);
+                Move(directions.RIGHT, 2, .25);
 
                 //drop the pixel
+                sleep(1000);
                 openClaw();
                 sleep(500);
+                sleep(500);
+                Move(directions.LEFT, 2, .25);
+
 
                 //park
-
-                Move(directions.LEFT, 24, .25);
-                Move(directions.BACKWARDS, 102, .25);
+                Move(directions.FORWARDS, 84, .25);
+                Move(directions.RIGHT, 27, .25);
+                Move(directions.FORWARDS, 12, .25);
                 break;
 
             }
@@ -165,15 +172,31 @@ public class AutoBR extends LinearOpMode {
             case CENTER: // Level 2
             {
 
+                //prep
+                closeClaw();
+                sleep(500);
+
+                //go to target
+                Move(directions.RIGHT, 35, .25);
+                Move(directions.CLOCKWISE, 23, .25);
+                Move(directions.BACKWARDS, 1, .25);
+
+                //drop the pixel
+                openClaw();
+                sleep(500);
+
+
+                //park
+                Move(directions.FORWARDS, 5, .25);
+                Move(directions.RIGHT, 72, .25);
+                Move(directions.BACKWARDS, 20, .25);
+                Move(directions.RIGHT, 24, .25);
+                break;
+
             }
         }
 
     }
-
-
-
-
-
 
     private void Move(directions direction, int target, double speed) {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -183,7 +206,7 @@ public class AutoBR extends LinearOpMode {
 
 
         // This sets the direction for the motor for the wheels to drive forward
-        if (direction == AutoBR.directions.FORWARDS) {
+        if (direction == directions.FORWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -191,7 +214,7 @@ public class AutoBR extends LinearOpMode {
         }
 
         // Sets the motor direction to move Backwards
-        else if (direction == AutoBR.directions.BACKWARDS) {
+        else if (direction == directions.BACKWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -199,7 +222,7 @@ public class AutoBR extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Left ( Note * Port = Left)
-        else if (direction == AutoBR.directions.LEFT) {
+        else if (direction == directions.LEFT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -207,19 +230,19 @@ public class AutoBR extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Right (Note * Starboard = Right)
-        else if (direction == AutoBR.directions.RIGHT) {
+        else if (direction == directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
-        else if (direction == AutoBR.directions.CLOCKWISE) {
+        else if (direction == directions.CLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
-        else if (direction == AutoBR.directions.COUNTERCLOCKWISE) {
+        else if (direction == directions.COUNTERCLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -263,65 +286,29 @@ public class AutoBR extends LinearOpMode {
         COUNTERCLOCKWISE
     }
 
-    public void turn180(double speed, int distance){
-
-        motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
-        motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorFL.setTargetPosition(distance * in);
-        motorFR.setTargetPosition(distance * in);
-        motorBL.setTargetPosition(distance * in);
-        motorBR.setTargetPosition(distance * in);
-
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        motorBL.setPower(speed);
-        motorFL.setPower(speed);
-        motorBR.setPower(speed);
-        motorFR.setPower(speed);
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
     public void lsUp(double speed, int distance){
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
         motorLS.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         motorLS.setTargetPosition(distance * in);
 
+
         motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         motorLS.setPower(-speed);
 
         sleep(500);
 
-        servoRadial.setPosition(1);
-        servoLadial.setPosition(1);
 
-        sleep(500);
 
-        servoWR.setPosition(1);
-        servoWL.setPosition(1);
+
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
@@ -331,69 +318,57 @@ public class AutoBR extends LinearOpMode {
     }
 
     public void lsDown(double speed, int distance){
-
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
         motorLS.setDirection(DcMotorSimple.Direction.FORWARD);
 
+
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         motorLS.setTargetPosition(distance * in);
 
+
         motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         motorLS.setPower(-speed);
 
         sleep(500);
 
-        servoRadial.setPosition(-1);
-        servoLadial.setPosition(-1);
 
-        sleep(500);
 
-        servoWR.setPosition(-1);
-        servoWL.setPosition(-1);
+
+
+
+
 
         while (opModeIsActive() && motorFL.isBusy()) {
         }
 
         motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-    }
 
-    //unused because it was written for an un-continuous servo
+    }
     public void wristUp(){
         servoWR.setPosition(.6);
         servoWL.setPosition(.6);
     }
-
-    //unused because it was written for an un-continuous servo
-    public void wristDown(){
+    public void wristDown() {
         servoWR.setPosition(.4);
         servoWL.setPosition(.4);
     }
-
-    //sets continuous servo internal position (where the servo thinks it is)
-    public void resetWrist(){
-        servoWR.setPosition(.5);
-        servoWL.setPosition(.5);
-    }
-
-    //opens claw
     public void openClaw(){
-        servoCR.setPosition(.2);
+        servoCR.setPosition(.3);
         servoCL.setPosition(.2);
     }
-
-    //closes claw
     public void closeClaw(){
         servoCR.setPosition(0);
         servoCL.setPosition(0);
     }
-
-    //lifts the arm so it doesn't drag
     public void Radial(){
-        servoLadial.setPosition(.03);
+
+        servoRadial.setPosition(.03);
     }
 
 }

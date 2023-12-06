@@ -20,8 +20,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // This is code so that a separate code can refer to it | This is how the camera can get its data//
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// This entire thing is a Mario reference                                                        //
-///////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 @TeleOp
 public class Red extends LinearOpMode
@@ -169,7 +168,7 @@ public class Red extends LinearOpMode
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        private volatile SkystonePosition position = SkystonePosition.LEFT;
+        private volatile SkystonePosition position = SkystonePosition.RIGHT;
 
 
         // This function takes the RGB frame, converts to YCrCb,
