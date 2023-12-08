@@ -19,6 +19,7 @@ public class Driver_Blue extends LinearOpMode {
     private DcMotor motorBL;
     private DcMotor motorBR;
     private DcMotor motorHL;
+    private DcMotor motorHR;
 
     Servo servoRadial;
     Servo servoCL;
@@ -37,6 +38,7 @@ public class Driver_Blue extends LinearOpMode {
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorLS = hardwareMap.dcMotor.get("motorLS");
         motorHL = hardwareMap.dcMotor.get("motorHL");
+        motorHR = hardwareMap.dcMotor.get("motorHR");
         servoCL = hardwareMap.servo.get("servoCL");
         servoCR = hardwareMap.servo.get("servoCR");
         servoRadial = hardwareMap.servo.get("servoRadial");
@@ -146,9 +148,14 @@ public class Driver_Blue extends LinearOpMode {
 
 //hook
             if(gamepad2.right_stick_y>0){
-                motorHL.setPower(.5);
+                motorHL.setPower(1);
+                motorHR.setPower(1);
             }else if(gamepad2.right_stick_y<0){
-                motorHL.setPower(.5);
+                motorHL.setPower(-1);
+                motorHR.setPower(-1);
+            }else{
+                motorHL.setPower(0);
+                motorHR.setPower(0);
             }
 
             //drone
