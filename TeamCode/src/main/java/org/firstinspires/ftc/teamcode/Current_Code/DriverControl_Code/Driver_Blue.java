@@ -19,6 +19,7 @@ public class Driver_Blue extends LinearOpMode {
     private DcMotor motorBL;
     private DcMotor motorBR;
     private DcMotor motorHL;
+    private DcMotor motorHR;
 
     Servo servoRadial;
     Servo servoCL;
@@ -37,17 +38,21 @@ public class Driver_Blue extends LinearOpMode {
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorLS = hardwareMap.dcMotor.get("motorLS");
         motorHL = hardwareMap.dcMotor.get("motorHL");
+        motorHR = hardwareMap.dcMotor.get("motorHR");
         servoCL = hardwareMap.servo.get("servoCL");
         servoCR = hardwareMap.servo.get("servoCR");
         servoRadial = hardwareMap.servo.get("servoRadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
+        servoDrone = hardwareMap.servo.get("servoDrone");
+
 
         motorLS.setPower(0);
         motorFL.setPower(0);
         motorBL.setPower(0);
         motorFR.setPower(0);
         motorBR.setPower(0);
+        servoDrone.setPosition(.17);
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -62,6 +67,7 @@ public class Driver_Blue extends LinearOpMode {
         servoRadial.setDirection(Servo.Direction.REVERSE);
         servoWR.setDirection(Servo.Direction.REVERSE);
         servoWL.setDirection(Servo.Direction.FORWARD);
+        servoDrone.setDirection(Servo.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "IMU");
@@ -146,15 +152,16 @@ public class Driver_Blue extends LinearOpMode {
 
 //hook
             if(gamepad2.right_stick_y>0){
-                motorHL.setPower(.5);
+                motorHL.setPower(1);
+                motorHR.setPower(1);
             }else if(gamepad2.right_stick_y<0){
-                motorHL.setPower(.5);
+                motorHL.setPower(-1);
+                motorHR.setPower(-1);
+            }else{
+                motorHL.setPower(0);
+                motorHR.setPower(0);
             }
 
-            //drone
-            if(gamepad1.a){
-                servoDrone.setPosition(.4);
-            }
 
             // LINEAR SLIDE//
 
@@ -166,7 +173,7 @@ public class Driver_Blue extends LinearOpMode {
             }
 
             //launch drone
-            if(gamepad1.a){
+            if(gamepad1.y){
                 servoDrone.setPosition(.4);
             }
 

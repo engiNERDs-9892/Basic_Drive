@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Current_Code.DriverControl_Code;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -44,6 +43,7 @@ public class Driver_Red extends LinearOpMode {
         servoRadial = hardwareMap.servo.get("servoRadial");
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
+        servoDrone = hardwareMap.servo.get("servoDrone");
 
         motorLS.setPower(0);
         motorFL.setPower(0);
@@ -52,6 +52,7 @@ public class Driver_Red extends LinearOpMode {
         motorBR.setPower(0);
         motorHL.setPower(0);
         motorHR.setPower(0);
+        servoDrone.setPosition(.17);
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -68,6 +69,7 @@ public class Driver_Red extends LinearOpMode {
         servoRadial.setDirection(Servo.Direction.REVERSE);
         servoWR.setDirection(Servo.Direction.REVERSE);
         servoWL.setDirection(Servo.Direction.FORWARD);
+        servoDrone.setDirection(Servo.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "IMU");
@@ -171,7 +173,7 @@ public class Driver_Red extends LinearOpMode {
             }
 
             //drone
-            if(gamepad1.a){
+            if(gamepad1.y){
                 servoDrone.setPosition(.4);
             }
 
