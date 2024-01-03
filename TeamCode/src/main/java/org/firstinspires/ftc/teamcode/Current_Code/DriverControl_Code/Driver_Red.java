@@ -174,7 +174,7 @@ public class Driver_Red extends LinearOpMode {
 
             //drone
             if(gamepad1.y){
-                servoDrone.setPosition(.4);
+                servoDrone.setPosition(.3);
             }
 
             // wheels//
@@ -200,19 +200,30 @@ public class Driver_Red extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
+
+            //speeds
             if (gamepad1.left_trigger  !=0) {
                 motorFL.setPower(.3 * frontLeftPower);
                 motorBL.setPower(.3 * backLeftPower);
                 motorFR.setPower(.3 * frontRightPower);
                 motorBR.setPower(.3 * backRightPower);
             } else {
-                motorFL.setPower(.65 * frontLeftPower);
-                motorBL.setPower(.65 * backLeftPower);
-                motorFR.setPower(.65 * frontRightPower);
-                motorBR.setPower(.65 * backRightPower);
+                motorFL.setPower(.8 * frontLeftPower);
+                motorBL.setPower(.8 * backLeftPower);
+                motorFR.setPower(.8 * frontRightPower);
+                motorBR.setPower(.8 * backRightPower);
             }
-        }
+            if(gamepad1.right_trigger !=0){
+                motorFL.setPower(1 * frontLeftPower);
+                motorBL.setPower(1 * backLeftPower);
+                motorFR.setPower(1 * frontRightPower);
+                motorBR.setPower(1 * backRightPower);
+            }
 
+        }
     }
+
 }
+
+
 

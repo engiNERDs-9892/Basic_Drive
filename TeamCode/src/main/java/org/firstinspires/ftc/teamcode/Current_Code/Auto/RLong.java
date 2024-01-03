@@ -13,8 +13,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="AutoBR", group="Robot")
-public class AutoBR extends LinearOpMode {
+@Autonomous(name="RLong", group="Robot")
+public class RLong extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
@@ -29,9 +29,9 @@ public class AutoBR extends LinearOpMode {
     private Servo servoCL;
 
     private DcMotor motorLS = null;
-    OpenCvWebcam webcamBlue;
-    Blue.SkystoneDeterminationPipeline pipeline;
-    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
+    OpenCvWebcam webcamRed;
+    Red.SkystoneDeterminationPipeline pipeline;
+    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -53,16 +53,17 @@ public class AutoBR extends LinearOpMode {
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcamBlue = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
-        pipeline = new Blue.SkystoneDeterminationPipeline();
-        webcamBlue.setPipeline(pipeline);
+        webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        pipeline = new Red.SkystoneDeterminationPipeline();
+        webcamRed.setPipeline(pipeline);
 
-        webcamBlue.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcamRed.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 // This is in what viewing window the camera is seeing through and it doesn't matter
                 // what orientation it is | UPRIGHT, SIDEWAYS_LEFT, SIDEWAYS_RIGHT, etc.
-                webcamBlue.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+
+                webcamRed.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -94,7 +95,7 @@ public class AutoBR extends LinearOpMode {
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
         servoCL = hardwareMap.servo.get("servoCL");
-        servoCR = hardwareMap.servo.get("servoCL");
+        servoCR = hardwareMap.servo.get("servoCR");
 
 
 
@@ -117,26 +118,30 @@ public class AutoBR extends LinearOpMode {
 
         waitForStart();
 
+
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
                 //prep
                 closeClaw();
-                sleep(500);
+                sleep(100);
 
                 //go to target
-                Move(directions.RIGHT, 32, .25);
-                Move(directions.FORWARDS, 18, .25);
+                Move(directions.LEFT, 40, .25);
                 sleep(500);
+                Move(directions.BACKWARDS, 3, .25);
 
                 //drop the pixel
+                sleep(1000);
                 openClaw();
                 sleep(500);
 
-                //park
-                Move(directions.FORWARDS, 69, .25);
-                Move(directions.RIGHT, 12, .25);
 
+                //park
+                Move(directions.RIGHT, 6, .25);
+                Move(directions.FORWARDS, 78, .25);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 12, .25);
                 break;
 
             }
@@ -146,27 +151,24 @@ public class AutoBR extends LinearOpMode {
             {
                 //prep
                 closeClaw();
-                sleep(100);
+                sleep(500);
+
 
                 //go to target
-                Move(directions.RIGHT, 32, .25);
-                Move(directions.BACKWARDS, 6, .25);
-                Move(directions.RIGHT, 2, .25);
+                Move(directions.LEFT, 29, .25);
+                Move(directions.FORWARDS, 20, .25);
+                Move(directions.LEFT, 6, .25);
+                sleep(500);
 
                 //drop the pixel
-                sleep(1000);
                 openClaw();
                 sleep(500);
-                sleep(500);
-                Move(directions.LEFT, 2, .25);
-
 
                 //park
-                Move(directions.FORWARDS, 84, .25);
-                Move(directions.RIGHT, 27, .25);
-                Move(directions.FORWARDS, 12, .25);
+                Move(directions.FORWARDS, 54, .25);
+                Move(directions.RIGHT, 26, .25);
+                Move(directions.FORWARDS, 6, .25);
                 break;
-
             }
 
             case CENTER: // Level 2
@@ -177,20 +179,21 @@ public class AutoBR extends LinearOpMode {
                 sleep(500);
 
                 //go to target
-                Move(directions.RIGHT, 35, .25);
-                Move(directions.CLOCKWISE, 23, .25);
+                Move(directions.LEFT, 35, .25);
+                Move(directions.COUNTERCLOCKWISE, 24, .25);
                 Move(directions.BACKWARDS, 1, .25);
 
                 //drop the pixel
+                sleep(1000);
                 openClaw();
-                sleep(500);
+                sleep(1000);
 
 
                 //park
                 Move(directions.FORWARDS, 5, .25);
-                Move(directions.RIGHT, 72, .25);
-                Move(directions.BACKWARDS, 20, .25);
-                Move(directions.RIGHT, 24, .25);
+                Move(directions.LEFT, 90, .25);
+                Move(directions.BACKWARDS, 23, .25);
+                Move(directions.LEFT, 20, .25);
                 break;
 
             }
@@ -359,15 +362,18 @@ public class AutoBR extends LinearOpMode {
         servoWL.setPosition(.4);
     }
     public void openClaw(){
+        servoCR.setDirection(Servo.Direction.REVERSE);
+        servoCL.setDirection(Servo.Direction.FORWARD);
         servoCR.setPosition(.3);
-        servoCL.setPosition(.2);
+        servoCL.setPosition(.3);
     }
     public void closeClaw(){
+        servoCR.setDirection(Servo.Direction.REVERSE);
+        servoCL.setDirection(Servo.Direction.FORWARD);
         servoCR.setPosition(0);
         servoCL.setPosition(0);
     }
     public void Radial(){
-
         servoRadial.setPosition(.03);
     }
 

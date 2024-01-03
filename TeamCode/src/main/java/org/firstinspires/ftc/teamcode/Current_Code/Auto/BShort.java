@@ -13,8 +13,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="AutoBL", group="Robot")
-public class AutoBL extends LinearOpMode {
+@Autonomous(name="BShort", group="Robot")
+public class BShort extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
@@ -31,7 +31,7 @@ public class AutoBL extends LinearOpMode {
     private DcMotor motorLS = null;
     OpenCvWebcam webcamBlue;
     Blue.SkystoneDeterminationPipeline pipeline;
-    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
+    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -95,7 +95,7 @@ public class AutoBL extends LinearOpMode {
         servoWR = hardwareMap.servo.get("servoWR");
         servoWL = hardwareMap.servo.get("servoWL");
         servoCL = hardwareMap.servo.get("servoCL");
-        servoCR = hardwareMap.servo.get("servoCL");
+        servoCR = hardwareMap.servo.get("servoCR");
 
 
 
@@ -137,7 +137,7 @@ public class AutoBL extends LinearOpMode {
 
                 //park
                 Move(directions.FORWARDS, 18, .25);
-                Move(directions.LEFT, 28, .25);
+                Move(directions.LEFT, 29, .25);
                 Move(directions.FORWARDS, 6, .25);
                 break;
 
@@ -153,7 +153,7 @@ public class AutoBL extends LinearOpMode {
                 sleep(100);
 
                 //go to target
-                Move(directions.RIGHT, 26, .25);
+                Move(directions.RIGHT, 28, .25);
                 sleep(500);
                 Move(directions.BACKWARDS, 5, .25);
 
@@ -178,7 +178,7 @@ public class AutoBL extends LinearOpMode {
                 sleep(500);
 
                 //go to target
-                Move(directions.RIGHT, 35, .25);
+                Move(directions.RIGHT, 36, .25);
                 Move(directions.CLOCKWISE, 23, .25);
 
                 //drop the pixel
@@ -360,10 +360,14 @@ public class AutoBL extends LinearOpMode {
         servoWL.setPosition(.4);
     }
     public void openClaw(){
+        servoCR.setDirection(Servo.Direction.REVERSE);
+        servoCL.setDirection(Servo.Direction.FORWARD);
         servoCR.setPosition(.3);
-        servoCL.setPosition(.2);
+        servoCL.setPosition(.3);
     }
     public void closeClaw(){
+        servoCR.setDirection(Servo.Direction.REVERSE);
+        servoCL.setDirection(Servo.Direction.FORWARD);
         servoCR.setPosition(0);
         servoCL.setPosition(0);
     }
