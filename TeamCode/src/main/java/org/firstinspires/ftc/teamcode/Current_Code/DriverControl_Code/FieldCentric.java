@@ -1,34 +1,31 @@
 package org.firstinspires.ftc.teamcode.Current_Code.DriverControl_Code;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 @TeleOp
 
-public class Driver_Blue extends LinearOpMode {
-    private DcMotor motorLS;
+public class FieldCentric extends LinearOpMode {
+
     private DcMotor motorFL;
     private DcMotor motorFR;
     private DcMotor motorBL;
     private DcMotor motorBR;
-    private DcMotor motorHL;
-    private DcMotor motorHR;
-
-    Servo servoRadial;
-    Servo servoCL;
-    Servo servoCR;
-    Servo servoWR;
-    Servo servoWL;
-    Servo servoDrone;
-
+    private DcMotor motorLSL;
+    private DcMotor motorLSR;
+    Servo servoIn;
+    Servo servoArm;
+    Servo servoC;
     @Override
+
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
@@ -36,24 +33,18 @@ public class Driver_Blue extends LinearOpMode {
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorBR = hardwareMap.dcMotor.get("motorBR");
-        motorLS = hardwareMap.dcMotor.get("motorLS");
-        motorHL = hardwareMap.dcMotor.get("motorHL");
-        motorHR = hardwareMap.dcMotor.get("motorHR");
-        servoCL = hardwareMap.servo.get("servoCL");
-        servoCR = hardwareMap.servo.get("servoCR");
-        servoRadial = hardwareMap.servo.get("servoRadial");
-        servoWR = hardwareMap.servo.get("servoWR");
-        servoWL = hardwareMap.servo.get("servoWL");
-        servoDrone = hardwareMap.servo.get("servoDrone");
+        motorLSL = hardwareMap.dcMotor.get("motorLSL");
+        motorLSR = hardwareMap.dcMotor.get("motorLSR");
+        servoIn = hardwareMap.servo.get("servoIn");
+        servoArm = hardwareMap.servo.get("servoArm");
+        servoC = hardwareMap.servo.get("servoC");
 
-
-        motorLS.setPower(0);
         motorFL.setPower(0);
         motorBL.setPower(0);
         motorFR.setPower(0);
         motorBR.setPower(0);
-        servoDrone.setPosition(.17);
-
+        motorLSL.setPower(0);
+        motorLSR.setPower(0);
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
@@ -62,12 +53,7 @@ public class Driver_Blue extends LinearOpMode {
         motorFR.setDirection(DcMotor.Direction.FORWARD);
         motorBR.setDirection(DcMotor.Direction.FORWARD);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
-        motorLS.setDirection(DcMotor.Direction.REVERSE);
-        servoCR.setDirection(Servo.Direction.REVERSE);
-        servoRadial.setDirection(Servo.Direction.REVERSE);
-        servoWR.setDirection(Servo.Direction.REVERSE);
-        servoWL.setDirection(Servo.Direction.FORWARD);
-        servoDrone.setDirection(Servo.Direction.REVERSE);
+        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "IMU");
@@ -85,18 +71,15 @@ public class Driver_Blue extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if (isStopRequested()) return;
 
 
         while (opModeIsActive()) {
-            int motorLSpos = motorLS.getCurrentPosition();
-            double ls = gamepad2.left_stick_y; // Slide up or down
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
-
+            double ls = gamepad2.left_stick_y; // Slide up or down
             // This button choice was made so that it is hard to hit on accident
             // it can be freely changed based on preference.
 
@@ -105,83 +88,29 @@ public class Driver_Blue extends LinearOpMode {
                 imu.resetYaw();
             }
 
-            //CLAW//
-
-//close claw
-            if (gamepad2.a){
-                servoCL.setPosition(0);
-                servoCR.setPosition(0);
+            //turn  on intake system
+            if (gamepad2.right_bumper) {
+                servoIn.setPosition(1);
             }
-//open claw
-            if(gamepad2.b){
-                servoCL.setPosition(.2);
-                servoCR.setPosition(.2);
+            if (gamepad2.right_trigger !=0) {
+                servoIn.setPosition(0.5);
             }
 
-            //ARM//
-
-//arm up
-            if(gamepad2.y) {
-                servoRadial.setPosition(.66);
-
+            //clawww thinngy
+            if (gamepad2.b) {
+                servoC.setPosition(0.07);
             }
-//arm down
-
-            if ( gamepad2.x){
-                servoRadial.setPosition(.02);
-
+            if (gamepad2.a) {
+                servoC.setPosition(0);
             }
 
-            //WRIST//
-
-//wrist down
-            if (gamepad2.left_trigger != 0) {
-                servoWR.setPosition(.4);
-                servoWL.setPosition(.4);
-
+            //Arrrm  uup /dowwn
+            if (gamepad2.x) {
+                servoArm.setPosition(.02);
             }
-//wrist up
-            else if (gamepad2.right_trigger !=0) {
-                servoWR.setPosition(.6);
-                servoWL.setPosition(.6);
-//wrist
-            } else {
-                servoWR.setPosition(.5);
-                servoWL.setPosition(.5);
+            if (gamepad2.y) {
+                servoArm.setPosition(.7);
             }
-
-//hook
-            if(gamepad2.right_stick_y>0){
-                motorHL.setPower(1);
-                motorHR.setPower(1);
-            }else if(gamepad2.right_stick_y<0){
-                motorHL.setPower(-1);
-                motorHR.setPower(-1);
-            }else{
-                motorHL.setPower(0);
-                motorHR.setPower(0);
-            }
-
-
-            // LINEAR SLIDE//
-
-            if (ls == 0) {
-                motorLS.setPower(0);
-            } else {
-                // move slide up for ls < 0, move slide down on ls > 0
-                motorLS.setPower(ls * 1);
-            }
-
-            //launch drone
-            if(gamepad1.y){
-                servoDrone.setPosition(.3);
-            }
-
-            // wheels//
-
-
-            telemetry.addData("Position", motorLSpos);
-            telemetry.update();
 
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -200,10 +129,11 @@ public class Driver_Blue extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
+
             //speeds
             if (gamepad1.left_trigger  !=0) {
                 motorFL.setPower(.3 * frontLeftPower);
-                motorBL.setPower(.3 * backLeftPower);
+                motorBL.setPower(.3* backLeftPower);
                 motorFR.setPower(.3 * frontRightPower);
                 motorBR.setPower(.3 * backRightPower);
             } else {
@@ -211,6 +141,7 @@ public class Driver_Blue extends LinearOpMode {
                 motorBL.setPower(.8 * backLeftPower);
                 motorFR.setPower(.8 * frontRightPower);
                 motorBR.setPower(.8 * backRightPower);
+
             }
             if(gamepad1.right_trigger !=0){
                 motorFL.setPower(1 * frontLeftPower);
@@ -219,9 +150,20 @@ public class Driver_Blue extends LinearOpMode {
                 motorBR.setPower(1 * backRightPower);
             }
 
+            //LINEAR SLIDE
+
+            if (ls == 0) {
+                motorLSL.setPower(0);
+                motorLSR.setPower(0);
+            } else {
+                // move slide up for ls < 0, move slide down on ls > 0
+                motorLSL.setPower(ls * 0.95);
+                motorLSR.setPower(ls * 0.95);
             }
         }
-
     }
+
+}
+
 
 

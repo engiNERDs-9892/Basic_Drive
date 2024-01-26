@@ -13,25 +13,19 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="BShort", group="Robot")
-public class BShort extends LinearOpMode {
+@Autonomous(name="R_Long", group="Robot")
+public class R_Long extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
     private DcMotor motorFR = null;
     private DcMotor motorBL = null;
     private DcMotor motorBR = null;
-    private Servo servoRadial;
 
-    private Servo servoWR;
-    private Servo servoWL;
-    private Servo servoCR;
-    private Servo servoCL;
-
-    private DcMotor motorLS = null;
-    OpenCvWebcam webcamBlue;
-    Blue.SkystoneDeterminationPipeline pipeline;
-    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    Servo servoArm;
+    Servo servoC;    OpenCvWebcam webcam;
+    Red.SkystoneDeterminationPipeline pipeline;
+    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -50,20 +44,20 @@ public class BShort extends LinearOpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
 
+
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcamBlue = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
-        pipeline = new Blue.SkystoneDeterminationPipeline();
-        webcamBlue.setPipeline(pipeline);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
+        pipeline = new Red.SkystoneDeterminationPipeline();
+        webcam.setPipeline(pipeline);
 
-        webcamBlue.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 // This is in what viewing window the camera is seeing through and it doesn't matter
                 // what orientation it is | UPRIGHT, SIDEWAYS_LEFT, SIDEWAYS_RIGHT, etc.
-
-                webcamBlue.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -86,16 +80,13 @@ public class BShort extends LinearOpMode {
         telemetry.update();
 
         // Initialize the drive system variables.
-        motorFR = hardwareMap.get(DcMotor.class, "motorBL");
-        motorFL = hardwareMap.get(DcMotor.class, "motorBR");
-        motorBR = hardwareMap.get(DcMotor.class, "motorFL");
-        motorBL = hardwareMap.get(DcMotor.class, "motorFR");
-        motorLS = hardwareMap.get(DcMotor.class, "motorLS");
-        servoRadial = hardwareMap.servo.get("servoRadial");
-        servoWR = hardwareMap.servo.get("servoWR");
-        servoWL = hardwareMap.servo.get("servoWL");
-        servoCL = hardwareMap.servo.get("servoCL");
-        servoCR = hardwareMap.servo.get("servoCR");
+        motorFR = hardwareMap.get(DcMotor.class, "motorFR");
+        motorFL = hardwareMap.get(DcMotor.class, "motorFL");
+        motorBR = hardwareMap.get(DcMotor.class, "motorBR");
+        motorBL = hardwareMap.get(DcMotor.class, "motorBL");
+        servoC =hardwareMap.servo.get("servoC");
+        servoArm =hardwareMap.servo.get("servoArm");
+
 
 
 
@@ -110,7 +101,6 @@ public class BShort extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLS.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         telemetry.addData("Status", "\uD83C\uDD97");
@@ -118,29 +108,28 @@ public class BShort extends LinearOpMode {
 
         waitForStart();
 
+
+
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                //prep
-                closeClaw();
-                sleep(500);
-
                 //go to target
-                Move(directions.RIGHT, 29, .25);
-                Move(directions.FORWARDS, 18, .25);
-                Move(directions.RIGHT, 6, .25);
-                sleep(500);
+                Move(directions.FORWARDS, 24, .25);
+                Move(directions.COUNTERCLOCKWISE, 17, .25);
 
-                //drop the pixel
-                openClaw();
-                sleep(500);
+
+                //drop pixel
+                servoArm.setPosition(1);
+                servoC.setPosition(.07);
 
                 //park
-                Move(directions.FORWARDS, 18, .25);
-                Move(directions.LEFT, 29, .25);
-                Move(directions.FORWARDS, 6, .25);
-                break;
+                Move(directions.CLOCKWISE, 34, .25);
+                Move(directions.FORWARDS, 72, .25);
+                servoArm.setPosition(0);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 28 ,.25);
 
+                break;
 
             }
 
@@ -148,56 +137,52 @@ public class BShort extends LinearOpMode {
             case RIGHT: // Level 1
             {
 
-                //prep
-                closeClaw();
-                sleep(100);
-
                 //go to target
-                Move(directions.RIGHT, 28, .25);
-                sleep(500);
-                Move(directions.BACKWARDS, 5, .25);
+                Move(directions.FORWARDS, 24, .25);
+                Move(directions.CLOCKWISE, 17, .25);
+                Move(directions.LEFT, 3, .25);
 
-                //drop the pixel
-                sleep(1000);
-                openClaw();
-                sleep(500);
-
+                //drop pixel
+                Move(directions.FORWARDS, 2, .25);
+                servoArm.setPosition(1);
+                servoC.setPosition(.07);
 
                 //park
-                Move(directions.FORWARDS, 42, .25);
-                Move(directions.LEFT, 24, .25);
-                Move(directions.FORWARDS, 12, .25);
+                sleep(2000);
+                Move(directions.FORWARDS, 72, .25);
+                servoArm.setPosition(0);
+                Move(directions.RIGHT, 28, .25);
+                Move(directions.FORWARDS, 24, .25);
+
                 break;
             }
 
             case CENTER: // Level 2
             {
 
-                //prep
-                closeClaw();
-                sleep(500);
-
                 //go to target
-                Move(directions.RIGHT, 36, .25);
-                Move(directions.CLOCKWISE, 23, .25);
+                Move(directions.FORWARDS, 30, .25);
+                Move(directions.BACKWARDS, 4, .25);
 
                 //drop the pixel
-                sleep(1000);
-                openClaw();
-                sleep(1000);
-                sleep(500);
+                servoArm.setPosition(1);
+                servoC.setPosition(.07);
 
                 //park
-                Move(directions.FORWARDS, 5, .25);
-                Move(directions.RIGHT, 34, .25);
-                Move(directions.BACKWARDS, 20, .25);
+                sleep(2000);
+                servoArm.setPosition(0);
+                Move(directions.CLOCKWISE, 17 ,.25);
+                Move(directions.FORWARDS, 78, .25);
+                Move(directions.RIGHT, 24, .25);
+                Move(directions.FORWARDS, 24, .25);
+
 
                 break;
-
             }
         }
 
     }
+
 
     private void Move(directions direction, int target, double speed) {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -207,47 +192,47 @@ public class BShort extends LinearOpMode {
 
 
         // This sets the direction for the motor for the wheels to drive forward
-        if (direction == directions.FORWARDS) {
-            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+        if (direction == R_Long.directions.FORWARDS) {
+            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         // Sets the motor direction to move Backwards
-        else if (direction == directions.BACKWARDS) {
-            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        else if (direction == R_Long.directions.BACKWARDS) {
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
         // Sets the motor direction to move to the Left ( Note * Port = Left)
-        else if (direction == directions.LEFT) {
-            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        else if (direction == R_Long.directions.LEFT) {
+            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
         // Sets the motor direction to move to the Right (Note * Starboard = Right)
-        else if (direction == directions.RIGHT) {
-            motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
-        }
-        else if (direction == directions.CLOCKWISE) {
+        else if (direction == R_Long.directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         }
-        else if (direction == directions.COUNTERCLOCKWISE) {
+        else if (direction == directions.CLOCKWISE) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        else if (direction == directions.COUNTERCLOCKWISE) {
+            motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBR.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
         // Gives it a position to run to
@@ -269,6 +254,7 @@ public class BShort extends LinearOpMode {
         motorBR.setPower(speed);
 
 
+
         // While loop keeps the code running until motors reach the desired position
         while (opModeIsActive() && ((motorFL.isBusy() || motorFR.isBusy()))) {
         }
@@ -285,95 +271,5 @@ public class BShort extends LinearOpMode {
         RIGHT,
         CLOCKWISE,
         COUNTERCLOCKWISE
-    }
+    }}
 
-    public void lsUp(double speed, int distance){
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        motorLS.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        motorLS.setTargetPosition(distance * in);
-
-
-        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        motorLS.setPower(-speed);
-
-        sleep(500);
-
-
-
-
-
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
-    public void lsDown(double speed, int distance){
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        motorLS.setDirection(DcMotorSimple.Direction.FORWARD);
-
-
-        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        motorLS.setTargetPosition(distance * in);
-
-
-        motorLS.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        motorLS.setPower(-speed);
-
-        sleep(500);
-
-
-
-
-
-
-
-
-        while (opModeIsActive() && motorFL.isBusy()) {
-        }
-
-        motorLS.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-    }
-    public void wristUp(){
-        servoWR.setPosition(.6);
-        servoWL.setPosition(.6);
-    }
-    public void wristDown() {
-        servoWR.setPosition(.4);
-        servoWL.setPosition(.4);
-    }
-    public void openClaw(){
-        servoCR.setDirection(Servo.Direction.REVERSE);
-        servoCL.setDirection(Servo.Direction.FORWARD);
-        servoCR.setPosition(.3);
-        servoCL.setPosition(.3);
-    }
-    public void closeClaw(){
-        servoCR.setDirection(Servo.Direction.REVERSE);
-        servoCL.setDirection(Servo.Direction.FORWARD);
-        servoCR.setPosition(0);
-        servoCL.setPosition(0);
-    }
-    public void Radial(){
-
-        servoRadial.setPosition(.03);
-    }
-
-}
