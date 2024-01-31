@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="R_Long", group="Robot")
+@Autonomous(name="B_Long", group="Robot")
 public class B_Long extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -24,8 +24,8 @@ public class B_Long extends LinearOpMode {
 
     Servo servoArm;
     Servo servoC;    OpenCvWebcam webcam;
-    Red.SkystoneDeterminationPipeline pipeline;
-    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
+    Blue.SkystoneDeterminationPipeline pipeline;
+    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -49,7 +49,7 @@ public class B_Long extends LinearOpMode {
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
-        pipeline = new Red.SkystoneDeterminationPipeline();
+        pipeline = new Blue.SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -113,17 +113,22 @@ public class B_Long extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                servoC.setPosition(0.09);
+
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
                 Move(directions.COUNTERCLOCKWISE, 17, .25);
+                Move(directions.FORWARDS, 6, .25);
+                Move(directions.BACKWARDS, 6, .25);
 
 
                 //drop pixel
                 servoArm.setPosition(1);
-                servoC.setPosition(.07);
+                servoC.setPosition(0);
 
                 //park
-                Move(directions.CLOCKWISE, 34, .25);
+                sleep(1000);
+                servoArm.setPosition(0);
                 Move(directions.FORWARDS, 72, .25);
                 servoArm.setPosition(0);
                 Move(directions.LEFT, 24, .25);
@@ -136,29 +141,30 @@ public class B_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
+                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
                 Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.LEFT, 3, .25);
 
                 //drop pixel
-                Move(directions.FORWARDS, 2, .25);
+                Move(directions.FORWARDS, 6, .25);
+                Move(directions.BACKWARDS, 4, .25);
                 servoArm.setPosition(1);
-                servoC.setPosition(.07);
+                servoC.setPosition(0);
 
                 //park
                 sleep(2000);
                 Move(directions.BACKWARDS, 72, .25);
                 servoArm.setPosition(0);
-                Move(directions.LEFT, 28, .25);
-                Move(directions.BACKWARDS, 24, .25);
+                Move(directions.RIGHT, 42, .25);
 
                 break;
             }
 
             case CENTER: // Level 2
             {
+                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 30, .25);
@@ -166,7 +172,7 @@ public class B_Long extends LinearOpMode {
 
                 //drop the pixel
                 servoArm.setPosition(1);
-                servoC.setPosition(.07);
+                servoC.setPosition(0);
 
                 //park
                 sleep(2000);

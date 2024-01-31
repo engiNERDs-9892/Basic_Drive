@@ -113,6 +113,8 @@ public class R_Long extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                servoC.setPosition(0.09);
+
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
                 Move(directions.COUNTERCLOCKWISE, 17, .25);
@@ -136,6 +138,7 @@ public class R_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
+                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
@@ -145,7 +148,7 @@ public class R_Long extends LinearOpMode {
                 //drop pixel
                 Move(directions.FORWARDS, 2, .25);
                 servoArm.setPosition(1);
-                servoC.setPosition(.07);
+                servoC.setPosition(0);
 
                 //park
                 sleep(2000);
@@ -159,6 +162,7 @@ public class R_Long extends LinearOpMode {
 
             case CENTER: // Level 2
             {
+                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 30, .25);
@@ -166,7 +170,7 @@ public class R_Long extends LinearOpMode {
 
                 //drop the pixel
                 servoArm.setPosition(1);
-                servoC.setPosition(.07);
+                servoC.setPosition(0);
 
                 //park
                 sleep(2000);

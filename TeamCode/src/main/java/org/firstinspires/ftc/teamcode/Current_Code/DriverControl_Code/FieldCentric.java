@@ -98,15 +98,18 @@ public class FieldCentric extends LinearOpMode {
 
             //clawww thinngy
             if (gamepad2.b) {
-                servoC.setPosition(0.07);
+                servoC.setPosition(0.09);
             }
             if (gamepad2.a) {
                 servoC.setPosition(0);
             }
 
             //Arrrm  uup /dowwn
-            if (gamepad2.x) {
+            if (gamepad2.dpad_down) {
                 servoArm.setPosition(.02);
+            }
+            if (gamepad2.x){
+                servoArm.setPosition(.1);
             }
             if (gamepad2.y) {
                 servoArm.setPosition(.7);

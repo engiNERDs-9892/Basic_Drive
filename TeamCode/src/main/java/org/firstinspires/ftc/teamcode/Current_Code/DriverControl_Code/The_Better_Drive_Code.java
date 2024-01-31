@@ -71,8 +71,11 @@ public class The_Better_Drive_Code extends LinearOpMode {
             }
 
             //Arrrm  uup /dowwn
-            if (gamepad2.x) {
+            if (gamepad2.dpad_down) {
                 servoArm.setPosition(0);
+            }
+            if (gamepad2.x){
+                servoArm.setPosition(.1);
             }
             if (gamepad2.y) {
                 servoArm.setPosition(.65);
@@ -81,7 +84,7 @@ public class The_Better_Drive_Code extends LinearOpMode {
             //claw
 
             if (gamepad2.b) {
-                servoC.setPosition(0.07);
+                servoC.setPosition(0.09);
             }
             if (gamepad2.a) {
                 servoC.setPosition(0);
@@ -137,22 +140,22 @@ public class The_Better_Drive_Code extends LinearOpMode {
             telemetry.update();
 
             //speeds
-            if (gamepad1.left_trigger != 0) {
-                motorFL.setPower(.05 * leftFrontPower);
-                motorBL.setPower(.05 * leftBackPower);
-                motorFR.setPower(.05 * rightFrontPower);
-                motorBR.setPower(.05 * rightBackPower);
-            } else {
-                motorFL.setPower(.7 * leftFrontPower);
-                motorBL.setPower(.5 * leftBackPower);
-                motorFR.setPower(.7 * rightFrontPower);
-                motorBR.setPower(.5 * rightBackPower);
-            }
             if (gamepad1.left_stick_button) {
-                motorFL.setPower(1 * leftFrontPower);
-                motorBL.setPower(.8 * leftBackPower);
-                motorFR.setPower(1 * rightFrontPower);
-                motorBR.setPower(.8 * rightBackPower);
+                motorFL.setPower(.25 * leftFrontPower);
+                motorBL.setPower(.25 * leftBackPower);
+                motorFR.setPower(.25 * rightFrontPower);
+                motorBR.setPower(.25 * rightBackPower);
+            } else {
+                motorFL.setPower(.9 * leftFrontPower);
+                motorBL.setPower(.9 * leftBackPower);
+                motorFR.setPower(.9 * rightFrontPower);
+                motorBR.setPower(.9 * rightBackPower);
+            }
+            if (gamepad1.right_stick_button) {
+                motorFL.setPower(.75 * leftFrontPower);
+                motorBL.setPower(.75 * leftBackPower);
+                motorFR.setPower(.75 * rightFrontPower);
+                motorBR.setPower(.75 * rightBackPower);
             }
         }
     }
