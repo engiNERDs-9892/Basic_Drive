@@ -106,6 +106,9 @@ public class B_Long extends LinearOpMode {
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
 
+        servoC.setPosition(0.09);
+        servoArm.setPosition(0.4);
+
         waitForStart();
 
 
@@ -113,7 +116,7 @@ public class B_Long extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                servoC.setPosition(0.09);
+
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
@@ -125,6 +128,10 @@ public class B_Long extends LinearOpMode {
                 //drop pixel
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0);
+                sleep(500);
+                servoC.setPosition(0.09);
 
                 //park
                 sleep(1000);
@@ -141,17 +148,19 @@ public class B_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-                servoC.setPosition(0.09);
+
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
                 Move(directions.CLOCKWISE, 17, .25);
 
                 //drop pixel
-                Move(directions.FORWARDS, 6, .25);
-                Move(directions.BACKWARDS, 4, .25);
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0);
+                sleep(500);
+                servoC.setPosition(0.09);
 
                 //park
                 sleep(2000);
@@ -164,7 +173,7 @@ public class B_Long extends LinearOpMode {
 
             case CENTER: // Level 2
             {
-                servoC.setPosition(0.09);
+
 
                 //go to target
                 Move(directions.FORWARDS, 30, .25);
@@ -173,6 +182,10 @@ public class B_Long extends LinearOpMode {
                 //drop the pixel
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0);
+                sleep(500);
+                servoC.setPosition(0.09);
 
                 //park
                 sleep(2000);

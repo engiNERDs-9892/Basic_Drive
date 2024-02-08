@@ -24,6 +24,12 @@ public class FieldCentric extends LinearOpMode {
     Servo servoIn;
     Servo servoArm;
     Servo servoC;
+    Servo servoIn2;
+
+    Servo servoHangL;
+    Servo servoHangR;
+    Servo servoPlane;
+
     @Override
 
     public void runOpMode() throws InterruptedException {
@@ -38,6 +44,12 @@ public class FieldCentric extends LinearOpMode {
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
         servoC = hardwareMap.servo.get("servoC");
+        servoIn2 = hardwareMap.servo.get("servoIn2");
+        servoIn2 = hardwareMap.servo.get("servoIn2");
+        servoHangL = hardwareMap.servo.get("servoHangL");
+        servoHangR = hardwareMap.servo.get("servoHangR");
+        servoPlane = hardwareMap.servo.get("servoPlane");
+
 
         motorFL.setPower(0);
         motorBL.setPower(0);
@@ -72,7 +84,6 @@ public class FieldCentric extends LinearOpMode {
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        if (isStopRequested()) return;
 
 
         while (opModeIsActive()) {
@@ -88,85 +99,128 @@ public class FieldCentric extends LinearOpMode {
                 imu.resetYaw();
             }
 
-            //turn  on intake system
-            if (gamepad2.right_bumper) {
-                servoIn.setPosition(1);
-            }
-            if (gamepad2.right_trigger !=0) {
-                servoIn.setPosition(0.5);
-            }
+            //turrn on intake syystem
+                if (gamepad2.right_bumper) {
+                    servoIn.setPosition(1);
+                    servoIn2.setPosition(1);
+                }
+
+                if (gamepad2.left_trigger !=0) {
+                    servoIn.setPosition(0.5);
+                    servoIn2.setPosition(0.5);
+                }
+
+                if (gamepad2.right_trigger !=0) {
+                    servoIn.setPosition(0.5);
+                    servoIn2.setPosition(0.5);
+                }
+
+                if (gamepad2.left_bumper) {
+                    servoIn.setPosition(0.1);
+                    servoIn2.setPosition(0.1);
+                }
 
             //clawww thinngy
-            if (gamepad2.b) {
-                servoC.setPosition(0.09);
-            }
-            if (gamepad2.a) {
-                servoC.setPosition(0);
-            }
+                if (gamepad2.b) {
+                    servoC.setPosition(0.09);
+                }
+                if (gamepad2.a) {
+                    servoC.setPosition(0);
+                }
 
-            //Arrrm  uup /dowwn
-            if (gamepad2.dpad_down) {
-                servoArm.setPosition(.02);
-            }
-            if (gamepad2.x){
-                servoArm.setPosition(.1);
-            }
-            if (gamepad2.y) {
-                servoArm.setPosition(.7);
+            //Plane Launcher
+                if (gamepad1.dpad_right) {
+                    servoPlane.setPosition(0.25);
+
+                }
+            if (gamepad1.dpad_left) {
+                servoPlane.setPosition(0);
             }
 
-            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            //Sussy pension
+                if (gamepad1.x) {
+                    servoHangL.setPosition(0.66);
+                    servoHangR.setDirection(Servo.Direction.REVERSE);
+                    servoHangR.setPosition(0.66);
+                }
+                if (gamepad1.y) {
+                    servoHangL.setPosition(0.33);
+                    servoHangR.setDirection(Servo.Direction.REVERSE);
+                    servoHangR.setPosition(0.33);
+                }
 
-            // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+                if (gamepad1.b) {
+                    servoHangL.setPosition(0);
+                    servoHangR.setDirection(Servo.Direction.REVERSE);
+                    servoHangR.setPosition(0);
+                }
 
-            rotX = rotX * 1.1;  // Counteract imperfect strafing
+            //Arrrm uup /dowwn
+                if (gamepad2.dpad_down) {
+                    servoArm.setPosition(.02);
 
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio,
-            // but only if at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-            double frontLeftPower = (rotY + rotX + rx) / denominator;
-            double backLeftPower = (rotY - rotX + rx) / denominator;
-            double frontRightPower = (rotY - rotX - rx) / denominator;
-            double backRightPower = (rotY + rotX - rx) / denominator;
+                }
+                if (gamepad2.x) {
+                    servoArm.setPosition(.1);
+                }
+                if (gamepad2.y) {
+                    servoArm.setPosition(.7);
+                }
 
 
-            //speeds
-            if (gamepad1.left_trigger  !=0) {
-                motorFL.setPower(.3 * frontLeftPower);
-                motorBL.setPower(.3* backLeftPower);
-                motorFR.setPower(.3 * frontRightPower);
-                motorBR.setPower(.3 * backRightPower);
-            } else {
-                motorFL.setPower(.8 * frontLeftPower);
-                motorBL.setPower(.8 * backLeftPower);
-                motorFR.setPower(.8 * frontRightPower);
-                motorBR.setPower(.8 * backRightPower);
+                double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-            }
-            if(gamepad1.right_trigger !=0){
-                motorFL.setPower(1 * frontLeftPower);
-                motorBL.setPower(1 * backLeftPower);
-                motorFR.setPower(1 * frontRightPower);
-                motorBR.setPower(1 * backRightPower);
-            }
+                // Rotate the movement direction counter to the bot's rotation
+                double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+                double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
-            //LINEAR SLIDE
+                rotX = rotX * 1.1;  // Counteract imperfect strafing
 
-            if (ls == 0) {
-                motorLSL.setPower(0);
-                motorLSR.setPower(0);
-            } else {
-                // move slide up for ls < 0, move slide down on ls > 0
-                motorLSL.setPower(ls * 0.95);
-                motorLSR.setPower(ls * 0.95);
+                // Denominator is the largest motor power (absolute value) or 1
+                // This ensures all the powers maintain the same ratio,
+                // but only if at least one is out of the range [-1, 1]
+                double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
+                double frontLeftPower = (rotY + rotX + rx) / denominator;
+                double backLeftPower = (rotY - rotX + rx) / denominator;
+                double frontRightPower = (rotY - rotX - rx) / denominator;
+                double backRightPower = (rotY + rotX - rx) / denominator;
+
+
+                //speeds
+                if (gamepad1.left_trigger != 0) {
+                    motorFL.setPower(.3 * frontLeftPower);
+                    motorBL.setPower(.3 * backLeftPower);
+                    motorFR.setPower(.3 * frontRightPower);
+                    motorBR.setPower(.3 * backRightPower);
+                } else {
+                    motorFL.setPower(.8 * frontLeftPower);
+                    motorBL.setPower(.8 * backLeftPower);
+                    motorFR.setPower(.8 * frontRightPower);
+                    motorBR.setPower(.8 * backRightPower);
+
+                }
+                if (gamepad1.right_trigger != 0) {
+                    motorFL.setPower(1 * frontLeftPower);
+                    motorBL.setPower(1 * backLeftPower);
+                    motorFR.setPower(1 * frontRightPower);
+                    motorBR.setPower(1 * backRightPower);
+                }
+
+                //LINEAR SLIDE
+
+                if (ls == 0) {
+                    motorLSL.setPower(0);
+                    motorLSR.setPower(0);
+                } else {
+                    // move slide up for ls < 0, move slide down on ls > 0
+                    motorLSL.setPower(ls * 1);
+                    motorLSR.setPower(ls * 1);
+                }
+
+
             }
         }
+
     }
-
-}
-
 
 

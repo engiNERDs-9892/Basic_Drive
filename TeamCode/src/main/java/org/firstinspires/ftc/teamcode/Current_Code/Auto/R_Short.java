@@ -106,6 +106,7 @@ public class R_Short extends LinearOpMode {
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
 
+
         waitForStart();
 
 
@@ -113,7 +114,6 @@ public class R_Short extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
@@ -123,13 +123,23 @@ public class R_Short extends LinearOpMode {
                 //drop pixel
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0.09);
+                sleep(500);
+                servoC.setPosition(0);
+
+                //play on backboard
+                Move(directions.CLOCKWISE, 17, .25);
+                Move(directions.FORWARDS, 16, .25);
+                Move(directions.CLOCKWISE, 17, .25);
+                servoArm.setPosition(.7);
+                Move(directions.FORWARDS, 12,.25);
+                servoC.setPosition(0);
 
                 //park
-                Move(directions.CLOCKWISE, 34, .25);
-                Move(directions.FORWARDS, 48, .25);
-                servoArm.setPosition(0);
-                Move(directions.RIGHT, 24, .25);
-                Move(directions.FORWARDS, 28 ,.25);
+                Move(directions.BACKWARDS, 12, .25);
+                Move(directions.RIGHT, 48, .25);
+                Move(directions.FORWARDS, 24, .25);
 
                 break;
 
@@ -138,23 +148,36 @@ public class R_Short extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-                servoC.setPosition(0.09);
+                servoC.setPosition(0);
+                sleep(500);
+                servoArm.setPosition(0.3);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
-                Move(directions.CLOCKWISE, 17, .25);
                 Move(directions.LEFT, 3, .25);
+                Move(directions.CLOCKWISE, 16, .25);
+                Move(directions.FORWARDS, 9, .25);
+                Move(directions.BACKWARDS, 9, .25);
 
                 //drop pixel
-                Move(directions.FORWARDS, 2, .25);
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
-
-                //park
-                sleep(2000);
-                Move(directions.FORWARDS, 24, .25);
+                servoArm.setPosition(0.95);
+                servoC.setPosition(0.09);
+                sleep(1000);
                 servoArm.setPosition(0);
-                Move(directions.RIGHT, 28, .25);
+                sleep(1000);
+                servoC.setPosition(.09);
+
+                //play on backdrop
+               Move(directions.CLOCKWISE, 16, .25);
+               Move(directions.FORWARDS, 12, .25);
+               Move(directions.COUNTERCLOCKWISE, 17, .25);
+               Move(directions.FORWARDS, 12, .25);
+               servoC.setPosition(0.7);
+               servoC.setPosition(0);
+
+               //park
+                servoArm.setPosition(0.1);
+                Move(directions.RIGHT, 12, .25);
                 Move(directions.FORWARDS, 24, .25);
 
                 break;
@@ -162,24 +185,29 @@ public class R_Short extends LinearOpMode {
 
             case CENTER: // Level 2
             {
-                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 30, .25);
                 Move(directions.BACKWARDS, 4, .25);
 
-                //drop the pixel
+                //drop the pixel and pick up yellow
                 servoArm.setPosition(1);
+                servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0.09);
+                sleep(500);
+                servoC.setPosition(0);
+
+                //play on backboard
+                Move(directions.CLOCKWISE, 17, .25);
+                servoArm.setPosition(0.7);
+                Move(directions.FORWARDS, 15, .25);
                 servoC.setPosition(0);
 
                 //park
-                sleep(2000);
-                servoArm.setPosition(0);
-                Move(directions.CLOCKWISE, 17 ,.25);
-                Move(directions.FORWARDS, 36, .25);
+                Move(directions.BACKWARDS, 4, .25);
                 Move(directions.RIGHT, 24, .25);
                 Move(directions.FORWARDS, 24, .25);
-
 
                 break;
             }

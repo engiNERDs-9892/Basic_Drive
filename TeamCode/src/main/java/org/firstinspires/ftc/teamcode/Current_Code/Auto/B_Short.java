@@ -106,6 +106,9 @@ public class B_Short extends LinearOpMode {
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
 
+        servoC.setPosition(0.09);
+        servoArm.setPosition(0.4);
+
         waitForStart();
 
 
@@ -113,7 +116,6 @@ public class B_Short extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
-                servoC.setPosition(0.09);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
@@ -121,18 +123,21 @@ public class B_Short extends LinearOpMode {
                 Move(directions.FORWARDS, 6, .25);
                 Move(directions.BACKWARDS, 6, .25);
 
-
-                //drop pixel
+                //drop the pixel
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
-
-                //park
                 sleep(1000);
                 servoArm.setPosition(0);
-                Move(directions.FORWARDS, 24, .25);
-                servoArm.setPosition(0);
-                Move(directions.LEFT, 24, .25);
-                Move(directions.FORWARDS, 24 ,.25);
+                sleep(500);
+                servoC.setPosition(0.09);
+
+                //play on backdrop
+                Move(directions.COUNTERCLOCKWISE, 17, .25);
+                Move(directions.FORWARDS, 12, .25);
+                Move(directions.CLOCKWISE, 17, .25);
+                servoArm.setPosition(0.7);
+                Move(directions.FORWARDS, 12, .25);
+
 
                 break;
 
@@ -141,30 +146,39 @@ public class B_Short extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-                servoC.setPosition(0.09);
+
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
                 Move(directions.CLOCKWISE, 17, .25);
 
                 //drop pixel
-                Move(directions.FORWARDS, 6, .25);
-                Move(directions.BACKWARDS, 4, .25);
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
-
-                //park
-                sleep(2000);
-                Move(directions.BACKWARDS, 48, .25);
+                sleep(1000);
                 servoArm.setPosition(0);
-                Move(directions.RIGHT, 24, .25);
+                sleep(500);
+                servoC.setPosition(0.09);
+
+                //play on backdrop
+               Move(directions.COUNTERCLOCKWISE, 17, .25);
+               Move(directions.FORWARDS, 12,.25);
+               Move(directions.COUNTERCLOCKWISE, 17, .25);
+               servoArm.setPosition(0.7);
+               servoC.setPosition(0);
+
+               //park
+               servoArm.setPosition(0);
+               Move(directions.RIGHT, 48, .25);
+               Move(directions.FORWARDS, 24, .25);
+
 
                 break;
             }
 
             case CENTER: // Level 2
             {
-                servoC.setPosition(0.09);
+
 
                 //go to target
                 Move(directions.FORWARDS, 30, .25);
@@ -173,16 +187,22 @@ public class B_Short extends LinearOpMode {
                 //drop the pixel
                 servoArm.setPosition(1);
                 servoC.setPosition(0);
+                sleep(1000);
+                servoArm.setPosition(0);
+                sleep(500);
+                servoC.setPosition(0.09);
+
+               //play on backboard
+                Move(directions.FORWARDS, 12, .25);
+                Move(directions.COUNTERCLOCKWISE, 17, .25);
+                servoArm.setPosition(0.7);
+                servoC.setPosition(0);
 
                 //park
-                sleep(2000);
                 servoArm.setPosition(0);
-                Move(directions.COUNTERCLOCKWISE, 17 ,.25);
+                Move(directions.RIGHT, 24, .25);
                 Move(directions.FORWARDS, 24, .25);
-                Move(directions.LEFT, 24, .25);
-                Move(directions.FORWARDS, 24, .25);
-
-
+                
                 break;
             }
         }
