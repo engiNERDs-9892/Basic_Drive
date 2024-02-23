@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class The_Better_Drive_Code extends LinearOpMode {
+public class Robot_Centric extends LinearOpMode {
 
     private DcMotor motorFL;
     private DcMotor motorFR;
@@ -18,9 +18,7 @@ public class The_Better_Drive_Code extends LinearOpMode {
     Servo servoIn;
     Servo servoArm;
     Servo servoIn2;
-    Servo servoC;
-    Servo servoHangL;
-    Servo servoHangR;
+    Servo servoBucket;
     Servo servoPlane;
 
 
@@ -34,10 +32,8 @@ public class The_Better_Drive_Code extends LinearOpMode {
         motorLSR = hardwareMap.dcMotor.get("motorLSR");
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
-        servoC = hardwareMap.servo.get("servoC");
+        servoBucket = hardwareMap.servo.get("servoC");
         servoIn2 = hardwareMap.servo.get("servoIn2");
-        servoHangL = hardwareMap.servo.get("servoHangL");
-        servoHangR = hardwareMap.servo.get("servoHangR");
         servoPlane = hardwareMap.servo.get("servoPlane");
 
         motorFL.setPower(0);
@@ -86,51 +82,40 @@ public class The_Better_Drive_Code extends LinearOpMode {
                 servoIn.setPosition(0.1);
                 servoIn2.setPosition(0.1);
             }
+
             //Plane Launcher
             if (gamepad1.dpad_right) {
                 servoPlane.setPosition(0.25);
+            }
 
-                {
-                    if (gamepad1.dpad_left) {
-                        servoPlane.setPosition(0);
-
-                        //Suspension
-                        if (gamepad1.x) {
-                            servoHangL.setPosition(0.66);
-                            servoHangR.setDirection(Servo.Direction.REVERSE);
-                            servoHangR.setPosition(0.66);
-                        }
-                        if (gamepad2.y) {
-                            servoHangL.setPosition(0.33);
-                            servoHangR.setDirection(Servo.Direction.REVERSE);
-                            servoHangR.setPosition(0.33);
-                        }
-
-                        if (gamepad2.b) {
-                            servoHangL.setPosition(0);
-                            servoHangR.setDirection(Servo.Direction.REVERSE);
-                            servoHangR.setPosition(0);
-                        }
+            if (gamepad1.dpad_left) {
+                servoPlane.setPosition(0);
+            }
 
 
-                        //Arrrm uup /dowwn
-                        if (gamepad2.dpad_down) {
-                            servoArm.setPosition(0);
-                        }
-                        if (gamepad2.x) {
-                            servoArm.setPosition(.1);
-                        }
-                        if (gamepad2.y) {
-                            servoArm.setPosition(.65);
-                        }
+
+            //Arrrm uup /dowwn
+            if (gamepad2.dpad_down) {
+
+                servoArm.setPosition(0);
+            }
+
+            if (gamepad2.x) {
+
+                servoArm.setPosition(.1);
+            }
+
+            if (gamepad2.y) {
+                servoArm.setPosition(.65);
+            }
 
                         //claw
 
                         if (gamepad2.b) {
-                            servoC.setPosition(0.09);
+                            servoBucket.setPosition(1);
                         }
                         if (gamepad2.a) {
-                            servoC.setPosition(0);
+                            servoBucket.setPosition(0);
                         }
 
 
@@ -203,6 +188,4 @@ public class The_Better_Drive_Code extends LinearOpMode {
                     }
                 }
             }
-        }
-    }
-}
+

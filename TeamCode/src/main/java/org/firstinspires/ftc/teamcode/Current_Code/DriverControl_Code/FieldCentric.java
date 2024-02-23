@@ -23,11 +23,8 @@ public class FieldCentric extends LinearOpMode {
     private DcMotor motorLSR;
     Servo servoIn;
     Servo servoArm;
-    Servo servoC;
+    Servo servoBucket;
     Servo servoIn2;
-
-    Servo servoHangL;
-    Servo servoHangR;
     Servo servoPlane;
 
     @Override
@@ -43,11 +40,8 @@ public class FieldCentric extends LinearOpMode {
         motorLSR = hardwareMap.dcMotor.get("motorLSR");
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
-        servoC = hardwareMap.servo.get("servoC");
+        servoBucket = hardwareMap.servo.get("servoBucket");
         servoIn2 = hardwareMap.servo.get("servoIn2");
-        servoIn2 = hardwareMap.servo.get("servoIn2");
-        servoHangL = hardwareMap.servo.get("servoHangL");
-        servoHangR = hardwareMap.servo.get("servoHangR");
         servoPlane = hardwareMap.servo.get("servoPlane");
 
 
@@ -91,13 +85,13 @@ public class FieldCentric extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
             double ls = gamepad2.left_stick_y; // Slide up or down
+
             // This button choice was made so that it is hard to hit on accident
             // it can be freely changed based on preference.
-
-            if (gamepad1.dpad_down) {
+                if (gamepad1.dpad_down) {
                 // sets facing direction 'forward'
                 imu.resetYaw();
-            }
+                }
 
             //turrn on intake syystem
                 if (gamepad2.right_bumper) {
@@ -122,43 +116,24 @@ public class FieldCentric extends LinearOpMode {
 
             //clawww thinngy
                 if (gamepad2.b) {
-                    servoC.setPosition(0.09);
+                    servoBucket.setPosition(1);
                 }
                 if (gamepad2.a) {
-                    servoC.setPosition(0);
+                    servoBucket.setPosition(0);
                 }
 
             //Plane Launcher
                 if (gamepad1.dpad_right) {
                     servoPlane.setPosition(0.25);
-
                 }
-            if (gamepad1.dpad_left) {
-                servoPlane.setPosition(0);
-            }
-
-            //Sussy pension
-                if (gamepad1.x) {
-                    servoHangL.setPosition(0.66);
-                    servoHangR.setDirection(Servo.Direction.REVERSE);
-                    servoHangR.setPosition(0.66);
-                }
-                if (gamepad1.y) {
-                    servoHangL.setPosition(0.33);
-                    servoHangR.setDirection(Servo.Direction.REVERSE);
-                    servoHangR.setPosition(0.33);
+                if (gamepad1.dpad_left) {
+                    servoPlane.setPosition(0);
                 }
 
-                if (gamepad1.b) {
-                    servoHangL.setPosition(0);
-                    servoHangR.setDirection(Servo.Direction.REVERSE);
-                    servoHangR.setPosition(0);
-                }
 
             //Arrrm uup /dowwn
                 if (gamepad2.dpad_down) {
                     servoArm.setPosition(.02);
-
                 }
                 if (gamepad2.x) {
                     servoArm.setPosition(.1);
@@ -194,16 +169,16 @@ public class FieldCentric extends LinearOpMode {
                     motorBR.setPower(.3 * backRightPower);
                 } else {
                     motorFL.setPower(.8 * frontLeftPower);
-                    motorBL.setPower(.8 * backLeftPower);
+                    motorBL.setPower(.7 * backLeftPower);
                     motorFR.setPower(.8 * frontRightPower);
-                    motorBR.setPower(.8 * backRightPower);
+                    motorBR.setPower(.7 * backRightPower);
 
                 }
                 if (gamepad1.right_trigger != 0) {
                     motorFL.setPower(1 * frontLeftPower);
-                    motorBL.setPower(1 * backLeftPower);
+                    motorBL.setPower(.85 * backLeftPower);
                     motorFR.setPower(1 * frontRightPower);
-                    motorBR.setPower(1 * backRightPower);
+                    motorBR.setPower(.85 * backRightPower);
                 }
 
                 //LINEAR SLIDE

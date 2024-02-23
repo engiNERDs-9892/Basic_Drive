@@ -1,20 +1,22 @@
-package org.firstinspires.ftc.teamcode.Current_Code.Auto;
+package org.firstinspires.ftc.teamcode.Old_Code;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Current_Code.Auto.Red;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="B_Short", group="Robot")
-public class B_Short extends LinearOpMode {
+@Disabled
+        //(name="R_Long", group="Robot")
+public class R_Long extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
@@ -24,8 +26,8 @@ public class B_Short extends LinearOpMode {
 
     Servo servoArm;
     Servo servoC;    OpenCvWebcam webcam;
-    Blue.SkystoneDeterminationPipeline pipeline;
-    Blue.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Blue.SkystoneDeterminationPipeline.SkystonePosition.LEFT;
+    Red.SkystoneDeterminationPipeline pipeline;
+    Red.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = Red.SkystoneDeterminationPipeline.SkystonePosition.RIGHT;
     int in = 45;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -49,7 +51,7 @@ public class B_Short extends LinearOpMode {
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
-        pipeline = new Blue.SkystoneDeterminationPipeline();
+        pipeline = new Red.SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -84,7 +86,7 @@ public class B_Short extends LinearOpMode {
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-        servoC =hardwareMap.servo.get("servoC");
+        servoC = hardwareMap.servo.get("servoC");
         servoArm =hardwareMap.servo.get("servoArm");
 
 
@@ -106,8 +108,6 @@ public class B_Short extends LinearOpMode {
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
 
-        servoC.setPosition(0.09);
-        servoArm.setPosition(0.4);
 
         waitForStart();
 
@@ -116,28 +116,24 @@ public class B_Short extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                servoC.setPosition(0);
+                sleep(500);
+                servoArm.setPosition(0.3);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 3, .25);
                 Move(directions.COUNTERCLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 6, .25);
-                Move(directions.BACKWARDS, 6, .25);
 
-                //drop the pixel
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                //drop pixel
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
-                //play on backdrop
-                Move(directions.COUNTERCLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 12, .25);
-                Move(directions.CLOCKWISE, 17, .25);
-                servoArm.setPosition(0.7);
-                Move(directions.FORWARDS, 12, .25);
 
+                //park
 
                 break;
 
@@ -146,63 +142,47 @@ public class B_Short extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-
+                servoC.setPosition(0);
+                sleep(500);
+                servoArm.setPosition(0.3);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.RIGHT, 3, .25);
                 Move(directions.CLOCKWISE, 17, .25);
 
                 //drop pixel
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
-
-                //play on backdrop
-               Move(directions.COUNTERCLOCKWISE, 17, .25);
-               Move(directions.FORWARDS, 12,.25);
-               Move(directions.COUNTERCLOCKWISE, 17, .25);
-               servoArm.setPosition(0.7);
-               servoC.setPosition(0);
-
-               //park
-               servoArm.setPosition(0);
-               Move(directions.RIGHT, 48, .25);
-               Move(directions.FORWARDS, 24, .25);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
 
+                //park
+                
                 break;
             }
 
             case CENTER: // Level 2
             {
-
+                servoC.setPosition(0);
+                servoArm.setPosition(0.3);
 
                 //go to target
-                Move(directions.FORWARDS, 30, .25);
-                Move(directions.BACKWARDS, 4, .25);
+                Move(directions.FORWARDS, 34, .25);
+                Move(directions.BACKWARDS, 5, .25);
 
-                //drop the pixel
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                //drop
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
-               //play on backboard
-                Move(directions.FORWARDS, 12, .25);
-                Move(directions.COUNTERCLOCKWISE, 17, .25);
-                servoArm.setPosition(0.7);
-                servoC.setPosition(0);
 
                 //park
-                servoArm.setPosition(0);
-                Move(directions.RIGHT, 24, .25);
-                Move(directions.FORWARDS, 24, .25);
-                
+
                 break;
             }
         }
@@ -218,7 +198,7 @@ public class B_Short extends LinearOpMode {
 
 
         // This sets the direction for the motor for the wheels to drive forward
-        if (direction == B_Short.directions.FORWARDS) {
+        if (direction == R_Long.directions.FORWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -226,7 +206,7 @@ public class B_Short extends LinearOpMode {
         }
 
         // Sets the motor direction to move Backwards
-        else if (direction == B_Short.directions.BACKWARDS) {
+        else if (direction == R_Long.directions.BACKWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -234,7 +214,7 @@ public class B_Short extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Left ( Note * Port = Left)
-        else if (direction == B_Short.directions.LEFT) {
+        else if (direction == R_Long.directions.LEFT) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -242,7 +222,7 @@ public class B_Short extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Right (Note * Starboard = Right)
-        else if (direction == B_Short.directions.RIGHT) {
+        else if (direction == R_Long.directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -298,4 +278,5 @@ public class B_Short extends LinearOpMode {
         CLOCKWISE,
         COUNTERCLOCKWISE
     }}
+
 

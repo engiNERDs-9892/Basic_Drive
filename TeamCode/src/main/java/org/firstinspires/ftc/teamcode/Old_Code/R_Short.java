@@ -1,20 +1,22 @@
-package org.firstinspires.ftc.teamcode.Current_Code.Auto;
+package org.firstinspires.ftc.teamcode.Old_Code;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Current_Code.Auto.Red;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="R_Long", group="Robot")
-public class R_Long extends LinearOpMode {
+@Disabled
+        //(name="R_Short", group="Robot")
+public class R_Short extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor motorFL = null;
@@ -84,7 +86,7 @@ public class R_Long extends LinearOpMode {
         motorFL = hardwareMap.get(DcMotor.class, "motorFL");
         motorBR = hardwareMap.get(DcMotor.class, "motorBR");
         motorBL = hardwareMap.get(DcMotor.class, "motorBL");
-        servoC =hardwareMap.servo.get("servoC");
+        servoC = hardwareMap.servo.get("servoC");
         servoArm =hardwareMap.servo.get("servoArm");
 
 
@@ -106,8 +108,6 @@ public class R_Long extends LinearOpMode {
         telemetry.addData("Status", "\uD83C\uDD97");
         telemetry.update();
 
-        servoC.setPosition(0.09);
-        servoArm.setPosition(0.4);
 
         waitForStart();
 
@@ -116,32 +116,26 @@ public class R_Long extends LinearOpMode {
         switch (snapshotAnalysis) {
             case LEFT: // Level 3
             {
+                servoC.setPosition(0);
+                sleep(500);
+                servoArm.setPosition(0.3);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 3, .25);
                 Move(directions.COUNTERCLOCKWISE, 17, .25);
 
-
                 //drop pixel
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
-               //play on backboard
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 72, .25);
-                Move(directions.CLOCKWISE, 17, .25);
-                servoArm.setPosition(.7);
-                Move(directions.FORWARDS, 12,.25);
-                servoC.setPosition(0);
 
                 //park
-                Move(directions.BACKWARDS, 12, .25);
-                Move(directions.RIGHT, 48, .25);
-                Move(directions.FORWARDS, 24, .25);
+                Move(directions.RIGHT, 36, .25);
+                Move(directions.BACKWARDS, 48, .25);
 
                 break;
 
@@ -150,63 +144,49 @@ public class R_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
+                servoC.setPosition(0);
+                sleep(500);
+                servoArm.setPosition(0.3);
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.RIGHT, 3, .25);
                 Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.LEFT, 3, .25);
 
                 //drop pixel
-                Move(directions.FORWARDS, 2, .25);
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
-               //play on backdrop
-                Move(directions.FORWARDS, 72, .25);
-                servoArm.setPosition(0.7);
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 12, .25);
-                Move(directions.COUNTERCLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 6, .25);
-                servoC.setPosition(0);
 
-                //park
-                Move(directions.RIGHT, 12, .25);
-                Move(directions.FORWARDS, 24, .25);
-
+               //park
+               Move(directions.RIGHT, 26, .25);
+               Move(directions.FORWARDS, 48, .25);
                 break;
             }
 
             case CENTER: // Level 2
             {
+                servoC.setPosition(0);
+                servoArm.setPosition(0.3);
 
                 //go to target
-                Move(directions.FORWARDS, 30, .25);
-                Move(directions.BACKWARDS, 4, .25);
+                Move(directions.FORWARDS, 34, .25);
+                Move(directions.BACKWARDS, 5, .25);
 
-                //drop the pixel and pick up yellow
-                servoArm.setPosition(1);
-                servoC.setPosition(0);
+                //drop
+                servoArm.setPosition(0.95);
                 sleep(1000);
-                servoArm.setPosition(0);
-                sleep(500);
                 servoC.setPosition(0.09);
+                sleep(1000);
+                servoArm.setPosition(0.02);
 
-                //play on backboard
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 72, .25);
-                servoArm.setPosition(0.7);
-                servoC.setPosition(0);
 
                 //park
-                Move(directions.BACKWARDS, 4, .25);
-                Move(directions.RIGHT, 24, .25);
-                Move(directions.FORWARDS, 24, .25);
-
+                Move(directions.BACKWARDS, 24, .25);
+                Move(directions.RIGHT, 48, .25);
                 break;
             }
         }
@@ -222,7 +202,7 @@ public class R_Long extends LinearOpMode {
 
 
         // This sets the direction for the motor for the wheels to drive forward
-        if (direction == R_Long.directions.FORWARDS) {
+        if (direction == R_Short.directions.FORWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -230,7 +210,7 @@ public class R_Long extends LinearOpMode {
         }
 
         // Sets the motor direction to move Backwards
-        else if (direction == R_Long.directions.BACKWARDS) {
+        else if (direction == R_Short.directions.BACKWARDS) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -238,7 +218,7 @@ public class R_Long extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Left ( Note * Port = Left)
-        else if (direction == R_Long.directions.LEFT) {
+        else if (direction == R_Short.directions.LEFT) {
             motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -246,7 +226,7 @@ public class R_Long extends LinearOpMode {
         }
 
         // Sets the motor direction to move to the Right (Note * Starboard = Right)
-        else if (direction == R_Long.directions.RIGHT) {
+        else if (direction == R_Short.directions.RIGHT) {
             motorFL.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFR.setDirection(DcMotorSimple.Direction.FORWARD);
             motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -302,4 +282,5 @@ public class R_Long extends LinearOpMode {
         CLOCKWISE,
         COUNTERCLOCKWISE
     }}
+
 
