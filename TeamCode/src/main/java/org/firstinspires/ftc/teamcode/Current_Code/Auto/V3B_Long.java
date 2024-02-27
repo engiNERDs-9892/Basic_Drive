@@ -131,19 +131,18 @@ public class V3B_Long extends LinearOpMode {
 
                 //go to target
                 Move(directions.FORWARDS, 24,.25);
-                Move(directions.COUNTERCLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 6, .25);
+                Move(directions.LEFT, 24,.25);
+
 
                 //drop pixel
                 servoDropper.setPosition(0);
 
                 //go to backdrop
-                Move(V3B_Long.directions.FORWARDS, 24, .25);
-                Move(V3B_Long.directions.LEFT, 3, .25);
-
+                Move(V3B_Long.directions.RIGHT, 24, .25);
+                Move(directions.BACKWARDS, 3, .25);
 
                 //play on backdrop
-                Move(directions.CLOCKWISE, 34, .25);
+                Move(directions.CLOCKWISE, 17, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);

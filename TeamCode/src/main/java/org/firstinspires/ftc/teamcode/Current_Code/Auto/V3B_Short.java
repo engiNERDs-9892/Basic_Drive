@@ -128,8 +128,8 @@ public class V3B_Short extends LinearOpMode {
             {
 
                 //go to target
-                Move(V3B_Short.directions.RIGHT, 6, .25);
                 Move(V3B_Short.directions.FORWARDS, 24, .25);
+                Move(V3B_Short.directions.LEFT, 12, .25);
 
                 //drop
                 servoDropper.setPosition(0);

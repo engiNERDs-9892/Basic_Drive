@@ -130,8 +130,8 @@ public class V3R_Long extends LinearOpMode {
             case LEFT: // Level 3
             {
                 //go to target
-                Move(directions.LEFT, 6, .25);
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 12, .25);
 
                 //drop
                 servoDropper.setPosition(0);
