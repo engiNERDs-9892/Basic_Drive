@@ -139,16 +139,18 @@ public class V3B_Long extends LinearOpMode {
 
                 //go to backdrop
                 Move(V3B_Long.directions.FORWARDS, 24, .25);
-
-                //to play so
                 Move(V3B_Long.directions.LEFT, 3, .25);
+
+
+                //play on backdrop
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Long.directions.RIGHT, 27, .25);
+                Move(V3B_Long.directions.LEFT, 27, .25);
 
                 break;
 
@@ -164,16 +166,18 @@ public class V3B_Long extends LinearOpMode {
                 //go to backdrop
                 Move(V3B_Long.directions.COUNTERCLOCKWISE, 17, .25);
                 Move(V3B_Long.directions.FORWARDS, 24, .25);
-
-                //to play so
                 Move(V3B_Long.directions.LEFT, 3, .25);
+
+
+                //play on backdrop
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Long.directions.RIGHT, 27, .25);
+                Move(V3B_Long.directions.LEFT, 27, .25);
 
                 break;
             }
@@ -189,15 +193,15 @@ public class V3B_Long extends LinearOpMode {
                 Move(V3B_Long.directions.COUNTERCLOCKWISE, 17, .25);
                 Move(V3B_Long.directions.FORWARDS, 24, .25);
 
-                //to play so
-                Move(V3B_Long.directions.LEFT, 3, .25);
+                //play on backboard
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Long.directions.RIGHT, 27, .25);
+                Move(V3B_Long.directions.LEFT, 27, .25);
 
                 break;
             }

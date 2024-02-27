@@ -140,16 +140,18 @@ public class V3R_Long extends LinearOpMode {
                 Move(directions.RIGHT, 12, .25);
                 Move(directions.CLOCKWISE, 17, .25);
                 Move(directions.FORWARDS, 72, .25);
+                Move(directions.LEFT, 6, .25);
+
 
                 //play on backdrop
-                Move(directions.LEFT, 3, .25);
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(directions.RIGHT, 27, .25);
+                Move(directions.LEFT, 27, .25);
 
 
                 break;
@@ -159,7 +161,6 @@ public class V3R_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-
 
                 //go to target
                 Move(directions.FORWARDS, 24, .25);
@@ -171,16 +172,16 @@ public class V3R_Long extends LinearOpMode {
 
                 //go to backdrop
                 Move(directions.FORWARDS, 48, .25);
+                Move(directions.RIGHT, 3, .25);
 
                 //play on backdrop
-                Move(directions.RIGHT, 3, .25);
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
-                Move(directions.RIGHT, 12, .25);
-
+                Move(directions.LEFT, 12, .25);
 
                 break;
             }
@@ -201,13 +202,14 @@ public class V3R_Long extends LinearOpMode {
                 Move(directions.FORWARDS, 72, .25);
 
                 //play on backdrop
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(directions.RIGHT, 24, .25);
+                Move(directions.LEFT, 24, .25);
 
                 break;
             }

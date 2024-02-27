@@ -32,7 +32,7 @@ public class Robot_Centric extends LinearOpMode {
         motorLSR = hardwareMap.dcMotor.get("motorLSR");
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
-        servoBucket = hardwareMap.servo.get("servoC");
+        servoBucket = hardwareMap.servo.get("servoBucket");
         servoIn2 = hardwareMap.servo.get("servoIn2");
         servoPlane = hardwareMap.servo.get("servoPlane");
 
@@ -154,6 +154,7 @@ public class Robot_Centric extends LinearOpMode {
                             leftBackPower /= max;
                             rightBackPower /= max;
                         }
+
 
 
                         // Send calculated power to wheels

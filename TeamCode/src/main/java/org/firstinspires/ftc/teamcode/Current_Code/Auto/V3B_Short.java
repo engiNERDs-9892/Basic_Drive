@@ -138,17 +138,18 @@ public class V3B_Short extends LinearOpMode {
                 Move(V3B_Short.directions.RIGHT, 12, .25);
                 Move(directions.COUNTERCLOCKWISE, 17, .25);
                 Move(V3B_Short.directions.FORWARDS, 36, .25);
+                Move(V3B_Short.directions.LEFT, 3, .25);
+
 
                 //play on backdrop
-                Move(V3B_Short.directions.LEFT, 3, .25);
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Short.directions.RIGHT, 27, .25);
-
+                Move(V3B_Short.directions.LEFT, 27, .25);
 
                 break;
 
@@ -168,15 +169,17 @@ public class V3B_Short extends LinearOpMode {
 
                 //go to backdrop
                 Move(directions.FORWARDS, 24, .25);
+                Move(directions.RIGHT, 3, .25);
+
 
                 //play on backdrop
-                Move(directions.RIGHT, 3, .25);
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
-                Move(directions.RIGHT, 12, .25);
+                Move(directions.LEFT, 12, .25);
 
                 break;
             }
@@ -196,13 +199,14 @@ public class V3B_Short extends LinearOpMode {
                 Move(V3B_Short.directions.FORWARDS, 36, .25);
 
                 //play on backdrop
+                Move(directions.CLOCKWISE, 34, .25);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Short.directions.RIGHT, 24, .25);
+                Move(V3B_Short.directions.LEFT, 24, .25);
                 break;
             }
         }

@@ -166,19 +166,19 @@ public class FieldCentric extends LinearOpMode {
                     motorFL.setPower(.3 * frontLeftPower);
                     motorBL.setPower(.3 * backLeftPower);
                     motorFR.setPower(.3 * frontRightPower);
-                    motorBR.setPower(.3 * backRightPower);
+                    motorBR.setPower(0-.3 * backRightPower);
                 } else {
                     motorFL.setPower(.8 * frontLeftPower);
-                    motorBL.setPower(.7 * backLeftPower);
+                    motorBL.setPower(.8 * backLeftPower);
                     motorFR.setPower(.8 * frontRightPower);
-                    motorBR.setPower(.7 * backRightPower);
+                    motorBR.setPower(.8 * backRightPower);
 
                 }
                 if (gamepad1.right_trigger != 0) {
                     motorFL.setPower(1 * frontLeftPower);
-                    motorBL.setPower(.85 * backLeftPower);
+                    motorBL.setPower(1 * backLeftPower);
                     motorFR.setPower(1 * frontRightPower);
-                    motorBR.setPower(.85 * backRightPower);
+                    motorBR.setPower(1 * backRightPower);
                 }
 
                 //LINEAR SLIDE
