@@ -30,7 +30,6 @@ public class V3B_Long extends LinearOpMode {
     Servo servoArm;
     Servo servoIn;
     Servo servoBucket;
-    Servo servoIn2;
     Servo servoDropper;
     OpenCvWebcam webcam;
     Blue.SkystoneDeterminationPipeline pipeline;
@@ -98,7 +97,6 @@ public class V3B_Long extends LinearOpMode {
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
         servoBucket = hardwareMap.servo.get("servoBucket");
-        servoIn2 = hardwareMap.servo.get("servoIn2");
         servoDropper = hardwareMap.servo.get("servoDropper");
 
 
@@ -115,6 +113,9 @@ public class V3B_Long extends LinearOpMode {
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLSL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
 
         telemetry.addData("Status", "\uD83C\uDD97");
@@ -130,26 +131,28 @@ public class V3B_Long extends LinearOpMode {
             {
 
                 //go to target
-                Move(directions.FORWARDS, 24,.25);
-                Move(directions.LEFT, 24,.25);
+                Move(directions.FORWARDS, 24,.15);
+                Move(directions.LEFT, 24,.15);
 
 
                 //drop pixel
-                servoDropper.setPosition(0);
+                servoDropper.setPosition(0.7);
 
                 //go to backdrop
-                Move(V3B_Long.directions.RIGHT, 24, .25);
+                Move(directions.RIGHT, 24, .25);
                 Move(directions.BACKWARDS, 3, .25);
 
                 //play on backdrop
-                Move(directions.CLOCKWISE, 17, .25);
-                servoArm.setPosition(1);
-                sleep(1000);
-                servoBucket.setPosition(0);
+              //  Move(directions.CLOCKWISE, 17, .25);
+               // slides(2, 1);
+             //   sleep(500);
+             //   servoArm.setPosition(1);
+              //  sleep(1000);
+             //   servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Long.directions.LEFT, 27, .25);
+                Move(directions.LEFT, 27, .25);
 
                 break;
 
@@ -158,25 +161,25 @@ public class V3B_Long extends LinearOpMode {
 
             case RIGHT: // Level 1
             {
-                Move(V3B_Long.directions.FORWARDS, 24, .25);
 
-                servoDropper.setPosition(0);
 
                 //go to backdrop
-                Move(V3B_Long.directions.COUNTERCLOCKWISE, 17, .25);
-                Move(V3B_Long.directions.FORWARDS, 24, .25);
-                Move(V3B_Long.directions.LEFT, 3, .25);
+                Move(directions.COUNTERCLOCKWISE, 17, .25);
+                Move(directions.FORWARDS, 24, .25);
+                Move(directions.LEFT, 3, .25);
 
 
                 //play on backdrop
                 Move(directions.CLOCKWISE, 34, .25);
+                slides(2, 1);
+                sleep(500);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
 
                 //park
                 servoArm.setPosition(0.01);
-                Move(V3B_Long.directions.LEFT, 27, .25);
+                Move(directions.LEFT, 27, .25);
 
                 break;
             }
@@ -194,6 +197,8 @@ public class V3B_Long extends LinearOpMode {
 
                 //play on backboard
                 Move(directions.CLOCKWISE, 34, .25);
+                slides(2, 1);
+                sleep(500);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
@@ -206,6 +211,34 @@ public class V3B_Long extends LinearOpMode {
             }
         }
 
+    }
+
+    private void slides(int target, double speed){
+
+        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorLSL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        motorLSL.setTargetPosition(target * in);
+        motorLSR.setTargetPosition(target * in);
+
+        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        motorLSL.setPower(speed);
+        motorLSR.setPower(speed);
+
+        while (opModeIsActive() && ((motorFL.isBusy() || motorFR.isBusy()))) {
+        }
+
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 

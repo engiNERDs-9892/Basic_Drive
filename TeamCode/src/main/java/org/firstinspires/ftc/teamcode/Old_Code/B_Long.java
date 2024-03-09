@@ -41,8 +41,6 @@ public class B_Long extends LinearOpMode {
     // but still be displayed by sendTelemetry()
 
 
-
-
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -53,8 +51,6 @@ public class B_Long extends LinearOpMode {
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-
-
 
 
     @Override
@@ -91,10 +87,6 @@ public class B_Long extends LinearOpMode {
 
 
         snapshotAnalysis = pipeline.getAnalysis();
-
-
-
-
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
@@ -113,16 +105,9 @@ public class B_Long extends LinearOpMode {
 
 
 
-
-
-
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-
-
-
-
 
 
         // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode

@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="R_Short", group="Robot")
+@Autonomous(name="V3R_Short", group="Robot")
 public class V3R_Short extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -28,7 +28,6 @@ public class V3R_Short extends LinearOpMode {
     Servo servoArm;
     Servo servoIn;
     Servo servoBucket;
-    Servo servoIn2;
     Servo servoDropper;
     OpenCvWebcam webcam;
     Red.SkystoneDeterminationPipeline pipeline;
@@ -96,7 +95,6 @@ public class V3R_Short extends LinearOpMode {
         servoIn = hardwareMap.servo.get("servoIn");
         servoArm = hardwareMap.servo.get("servoArm");
         servoBucket = hardwareMap.servo.get("servoBucket");
-        servoIn2 = hardwareMap.servo.get("servoIn2");
         servoDropper = hardwareMap.servo.get("servoDropper");
 
 
@@ -138,6 +136,8 @@ public class V3R_Short extends LinearOpMode {
 
                 //play on backdrop
                 Move(directions.CLOCKWISE, 34, .25);
+                slides(2, 1);
+                sleep(500);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
@@ -168,6 +168,8 @@ public class V3R_Short extends LinearOpMode {
 
                 //play on backdrop
                 Move(directions.CLOCKWISE, 34, .25);
+                slides(2, 1);
+                sleep(500);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
@@ -196,6 +198,8 @@ public class V3R_Short extends LinearOpMode {
 
                 //play on backdrop
                 Move(directions.CLOCKWISE, 34, .25);
+                slides(2, 1);
+                sleep(500);
                 servoArm.setPosition(1);
                 sleep(1000);
                 servoBucket.setPosition(0);
@@ -210,6 +214,33 @@ public class V3R_Short extends LinearOpMode {
 
     }
 
+    private void slides(int target, double speed){
+
+        motorLSL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorLSL.setDirection(DcMotorSimple.Direction.FORWARD);
+        motorLSR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        motorLSL.setTargetPosition(target * in);
+        motorLSR.setTargetPosition(target * in);
+
+        motorLSL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        motorLSL.setPower(speed);
+        motorLSR.setPower(speed);
+
+        while (opModeIsActive() && ((motorFL.isBusy() || motorFR.isBusy()))) {
+        }
+
+        motorLSL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLSR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
     private void Move(directions direction, int target, double speed) {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
