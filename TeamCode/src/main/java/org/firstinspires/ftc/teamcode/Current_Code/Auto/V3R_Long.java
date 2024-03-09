@@ -128,30 +128,34 @@ public class V3R_Long extends LinearOpMode {
             case LEFT: // Level 3
             {
                 //go to target
-                Move(directions.FORWARDS, 24, .25);
-                Move(directions.LEFT, 12, .25);
+                Move(directions.FORWARDS, 26, .15);
+                Move(directions.COUNTERCLOCKWISE,19,.15);
+                Move(directions.FORWARDS,5,.15);
 
                 //drop
-                servoDropper.setPosition(0);
+                servoDropper.setPosition(0.57);
+                sleep(1000);
 
                 //got to backdrop
-                Move(directions.RIGHT, 12, .25);
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 72, .25);
-                Move(directions.LEFT, 6, .25);
+                // Move(V3B_Short.directions.RIGHT, 12, .25);
+                // Move(directions.COUNTERCLOCKWISE, 17, .25);
+                //  Move(V3B_Short.directions.FORWARDS, 36, .25);
+                //  Move(V3B_Short.directions.LEFT, 3, .25);
 
 
                 //play on backdrop
-                Move(directions.CLOCKWISE, 34, .25);
-                slides(2, 1);
-                sleep(500);
-                servoArm.setPosition(1);
-                sleep(1000);
-                servoBucket.setPosition(0);
+                //   Move(directions.CLOCKWISE, 34, .25);
+                //   slides(2, 1);
+                //   sleep(500);
+                //  servoArm.setPosition(1);
+                //  sleep(1000);
+                // servoBucket.setPosition(0);
 
                 //park
-                servoArm.setPosition(0.01);
-                Move(directions.LEFT, 27, .25);
+                //park
+                Move(directions.BACKWARDS,72,.25);
+                Move(directions.LEFT,36, .5);
+                Move(directions.BACKWARDS,48,.5);
 
 
                 break;
@@ -163,27 +167,34 @@ public class V3R_Long extends LinearOpMode {
             {
 
                 //go to target
-                Move(directions.FORWARDS, 24, .25);
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.FORWARDS, 12, .25);
+                Move(directions.FORWARDS, 26, .15);
+                Move(directions.CLOCKWISE,19,.15);
+                Move(directions.FORWARDS,5,.15);
+                Move(directions.LEFT,2,.15);
 
                 //drop
-                servoDropper.setPosition(0);
+                servoDropper.setPosition(.57);
+                sleep(1000);
 
                 //go to backdrop
-                Move(directions.FORWARDS, 48, .25);
-                Move(directions.RIGHT, 3, .25);
+                //  Move(directions.FORWARDS, 24, .25);
+                // Move(directions.RIGHT, 3, .25);
+
 
                 //play on backdrop
-                Move(directions.CLOCKWISE, 34, .25);
-                slides(2, 1);
-                sleep(500);
-                servoArm.setPosition(1);
-                sleep(1000);
-                servoBucket.setPosition(0);
+                // Move(directions.CLOCKWISE, 34, .25);
+                // slides(2, 1);
+                //  sleep(500);
+                //servoArm.setPosition(1);
+                // sleep(1000);
+                //servoBucket.setPosition(0);
 
                 //park
-                Move(directions.LEFT, 12, .25);
+                Move(directions.BACKWARDS,24,.5);
+                Move(directions.LEFT,26,.5);
+                Move(directions.FORWARDS,109,.5);
+                Move(directions.RIGHT,9,.25);
+                Move(directions.FORWARDS,10,.25);
 
                 break;
             }
@@ -192,28 +203,32 @@ public class V3R_Long extends LinearOpMode {
             {
 
                 //go to target
-                Move(directions.FORWARDS, 22, .25);
-                Move(directions.CLOCKWISE, 17, .25);
-                Move(directions.LEFT,3,.25);
+                Move(directions.FORWARDS, 30, .15);
 
                 //drop
-                servoDropper.setPosition(0);
+                servoDropper.setPosition(0.57);
+                sleep(1000);
 
                 //go to backdrop
-                Move(directions.RIGHT,3,.25);
-                Move(directions.FORWARDS, 72, .25);
+              //  Move(directions.RIGHT,3,.25);
+              //  Move(directions.FORWARDS, 72, .25);
 
                 //play on backdrop
-                Move(directions.CLOCKWISE, 34, .25);
-                slides(2, 1);
-                sleep(500);
-                servoArm.setPosition(1);
-                sleep(1000);
-                servoBucket.setPosition(0);
+              //  Move(directions.CLOCKWISE, 34, .25);
+                //slides(2, 1);
+            //    sleep(500);
+              //  servoArm.setPosition(1);
+                //sleep(1000);
+               // servoBucket.setPosition(0);
 
                 //park
-                servoArm.setPosition(0.01);
-                Move(directions.LEFT, 24, .25);
+                Move(directions.LEFT,24,.5);
+                Move(directions.FORWARDS,28,.5);
+                Move(directions.CLOCKWISE,19,.5);
+                Move(directions.FORWARDS,72,.5);
+                Move(directions.RIGHT,24,.25);
+                Move(directions.FORWARDS,48,.5);
+
 
                 break;
             }

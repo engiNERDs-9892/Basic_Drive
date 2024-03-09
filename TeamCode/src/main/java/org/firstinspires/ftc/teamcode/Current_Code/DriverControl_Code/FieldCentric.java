@@ -55,6 +55,7 @@ public class FieldCentric extends LinearOpMode {
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
 
+        servoHangR.setDirection(Servo.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorFR.setDirection(DcMotor.Direction.FORWARD);
         motorBR.setDirection(DcMotor.Direction.FORWARD);
@@ -67,7 +68,7 @@ public class FieldCentric extends LinearOpMode {
         IMU imu = hardwareMap.get(IMU.class, "IMU");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
@@ -97,7 +98,7 @@ public class FieldCentric extends LinearOpMode {
 
             //turn on intake system
             if (gamepad2.right_bumper) {
-                servoIn.setPosition(0.3);
+                servoIn.setPosition(0.4);
             }
 
             if (gamepad2.left_trigger != 0) {
@@ -109,7 +110,7 @@ public class FieldCentric extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper) {
-                servoIn.setPosition(0.7);
+                servoIn.setPosition(0.6);
             }
 
             //hanging

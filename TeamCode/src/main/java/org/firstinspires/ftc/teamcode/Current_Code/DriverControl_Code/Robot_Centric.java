@@ -50,6 +50,7 @@ public class Robot_Centric extends LinearOpMode {
         motorLSL.setPower(0);
         motorLSR.setPower(0);
 
+        servoHangR.setDirection(Servo.Direction.REVERSE);
 
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorFR.setDirection(DcMotor.Direction.FORWARD);
@@ -73,7 +74,7 @@ public class Robot_Centric extends LinearOpMode {
 
             //turn  on intake system uwu
             if (gamepad2.right_bumper) {
-                servoIn.setPosition(-0.6);
+                servoIn.setPosition(.4);
             }
 
             if (gamepad2.left_trigger != 0) {
@@ -148,7 +149,7 @@ public class Robot_Centric extends LinearOpMode {
 
             }else{
                 servoHangL.setPosition(0.5);
-                servoHangL.setPosition(0.5);
+                servoHangR.setPosition(0.5);
             }
 
 
@@ -178,37 +179,29 @@ public class Robot_Centric extends LinearOpMode {
                         }
 
 
-
-                        // Send calculated power to wheels
-                        motorFL.setPower(leftFrontPower);
-                        motorFR.setPower(rightFrontPower);
-                        motorBL.setPower(leftBackPower);
-                        motorBR.setPower(rightBackPower);
-
                         // Show the elapsed game time and wheel power.
                         telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
                         telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
                         telemetry.update();
 
-                        //speeds
-                        if (gamepad1.left_trigger != 0) {
-                            motorFL.setPower(.25 * leftFrontPower);
-                            motorBL.setPower(.25 * leftBackPower);
-                            motorFR.setPower(.25 * rightFrontPower);
-                            motorBR.setPower(.25 * rightBackPower);
+            if (gamepad1.left_trigger != 0) {
+                motorFL.setPower(.3 * leftFrontPower);
+                motorBL.setPower(.3 * leftBackPower);
+                motorFR.setPower(.3 * rightFrontPower);
+                motorBR.setPower(.3 * rightBackPower);
 
-                        }    else if (gamepad1.right_trigger != 0) {
-                                motorFL.setPower(.9 * leftFrontPower);
-                                motorBL.setPower(.9 * leftBackPower);
-                                motorFR.setPower(.9 * rightFrontPower);
-                                motorBR.setPower(.9 * rightBackPower);
-                            }
-                         else {
-                            motorFL.setPower(.65 * leftFrontPower);
-                            motorBL.setPower(.65 * leftBackPower);
-                            motorFR.setPower(.65 * rightFrontPower);
-                            motorBR.setPower(.65 * rightBackPower);
-                        }
+            }   else if (gamepad1.right_trigger != 0) {
+                motorFL.setPower(1 * leftFrontPower);
+                motorBL.setPower(1 * leftBackPower);
+                motorFR.setPower(1 * rightFrontPower);
+                motorBR.setPower(1 * rightBackPower);
+            }
+            else{
+                motorFL.setPower(.8 * leftFrontPower);
+                motorBL.setPower(.8 * leftBackPower);
+                motorFR.setPower(.8 * rightFrontPower);
+                motorBR.setPower(.8 * rightBackPower);
+            }
 
                     }
                 }

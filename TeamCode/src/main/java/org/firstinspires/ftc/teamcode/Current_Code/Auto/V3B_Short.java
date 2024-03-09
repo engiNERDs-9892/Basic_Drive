@@ -126,8 +126,9 @@ public class V3B_Short extends LinearOpMode {
             {
 
                 //go to target
-                Move(V3B_Short.directions.FORWARDS, 24, .15);
-                Move(V3B_Short.directions.LEFT, 11, .15);
+                Move(directions.FORWARDS, 26, .15);
+                Move(directions.COUNTERCLOCKWISE,19,.15);
+                Move(directions.FORWARDS,6,.15);
 
                 //drop
                 sleep(500);
@@ -149,8 +150,9 @@ public class V3B_Short extends LinearOpMode {
                // servoBucket.setPosition(0);
 
                 //park
-                Move(directions.BACKWARDS, 24, .25);
-                Move(V3B_Short.directions.LEFT, 40, .25);
+                Move(directions.BACKWARDS,6,.25);
+                Move(V3B_Short.directions.LEFT, 36, .25);
+                Move(directions.FORWARDS,48,.25);
 
                 break;
 
@@ -163,10 +165,11 @@ public class V3B_Short extends LinearOpMode {
                 //go to target
                 Move(directions.FORWARDS, 26, .15);
                 Move(directions.CLOCKWISE,19,.15);
-                Move(directions.FORWARDS,8,.15);
-                Move(directions.RIGHT,3,.15);
+                Move(directions.FORWARDS,6,.15);
+                Move(directions.LEFT,2,.15);
 
                 //drop
+                sleep(1000);
                 servoDropper.setPosition(.57);
 
                 //go to backdrop
@@ -184,6 +187,8 @@ public class V3B_Short extends LinearOpMode {
 
                 //park
                 Move(directions.BACKWARDS, 24, .25);
+                Move(directions.RIGHT,36,.25);
+                Move(directions.BACKWARDS,24,.25);
 
                 break;
             }
@@ -191,11 +196,11 @@ public class V3B_Short extends LinearOpMode {
             case CENTER: // Level 2
             {
                 //go to target
-                Move(V3B_Short.directions.FORWARDS, 22, .25);
-                Move(V3B_Short.directions.LEFT,3,.25);
+                Move(V3B_Short.directions.FORWARDS, 31, .15);
 
                 //drop
-                servoDropper.setPosition(0);
+                sleep(1000);
+                servoDropper.setPosition(.57);
 
                 //go to backdrop
              //   Move(V3B_Short.directions.RIGHT,3,.25);
@@ -210,8 +215,9 @@ public class V3B_Short extends LinearOpMode {
               //  servoBucket.setPosition(0);
 
                 //park
-                Move(V3B_Short.directions.LEFT, 30, .25);
-                Move(directions.BACKWARDS, 24, .25);
+                Move(directions.BACKWARDS, 36, .25);
+                Move(directions.LEFT, 48, .25);
+
                 break;
             }
         }
